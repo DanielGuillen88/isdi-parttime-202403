@@ -25,12 +25,12 @@ const createInspection = async (req, res) => {
     const newInspection = {  // Estructura de datos para guardar
       vehicle: { id: vehicle.id, model: vehicle.model, size: vehicle.size },
       inspection: { itemFix: inspection.itemFix, notes: inspection.notes },
-      worker: { workerName: worker.workerName, month: worker.month, year: worker.year }
+      worker: { workerName: worker.workerName, month: worker.month, year: worker.year, date: worker.date }
     }
 
     const InspectionRef = await db.collection('inspections').add(newInspection) // Guardar la inspección en Firestore
 
-    console.log(`Inspección registrada: ${vehicle.model} - ${worker.workerName}`)
+    console.log(`Inspección registrada: ${vehicle.model} - ${worker.workerName}- ${worker.date}`)
 
     res.status(201).json({ // Respuesta exitosa
       message: 'Nueva inspección registrada',
