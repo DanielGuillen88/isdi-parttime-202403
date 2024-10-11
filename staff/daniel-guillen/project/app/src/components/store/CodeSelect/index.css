@@ -2,7 +2,7 @@
 
 @layer components {
   .CodeSelectedDiv {
-    @apply bg-white flex flex-col rounded-sm;
+    @apply bg-white flex flex-col rounded-md;
   }
   .CodeSelected {
     @apply flex flex-col text-center text-xl leading-none;

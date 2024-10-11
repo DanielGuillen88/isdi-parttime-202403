@@ -5,7 +5,7 @@ import sortWasteItems from '../../../utils/sortWasteItems'
 import Text from '../../core/Text'
 import Button from '../../core/Button'
 
-const WasteList = ({ data = [], handleDeleteWaste }) => {
+const WasteList = ({ data, onClick }) => {
 
   const sortedData = sortWasteItems(data)
 
@@ -19,7 +19,7 @@ const WasteList = ({ data = [], handleDeleteWaste }) => {
         return (
           <div key={item.id} className='list'>
             <Button className={`NewWasteDiv ${item.container} ${item.status}`} onClick={() =>
-              handleDeleteWaste(item.id)}>
+              onClick(item.id)}>
                 
                 <Text>{item.code} - {item.container} - {item.weight}kg</Text>
                 <Text className='ShortDescription'>{shortDescription}</Text>

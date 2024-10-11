@@ -1,3 +1,4 @@
+// calcular el total del peso
 const calculateTotalWeight = (data) => {
     if (data.length === 0) {
       return null // Si no hay datos no calcular sino falla

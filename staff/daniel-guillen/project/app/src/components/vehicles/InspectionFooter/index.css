@@ -5,7 +5,7 @@
     @apply flex flex-col text-center;
   }
   .ItemsToFix {
-    @apply bg-red-500 text-white mt-2 text-center leading-tight rounded-sm;
+    @apply bg-red-500 text-white mt-2 text-center leading-tight rounded-md;
   }
   .InspectionNote {
     @apply bg-white text-black font-bold mt-2 text-center rounded-t-sm;

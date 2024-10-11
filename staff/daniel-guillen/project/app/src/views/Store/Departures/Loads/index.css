@@ -5,10 +5,10 @@
     @apply flex flex-col text-center mb-12 mx-4;
   }
   .TruckLoadForm {
-    @apply bg-white flex flex-col text-center;
+    @apply bg-white flex flex-col text-center rounded-b-sm;
   }
   .WeightWeekButtton {
-    @apply flex flex-row justify-center items-center rounded-b-sm;
+    @apply flex flex-row justify-center items-center;
   }
   .WeekYear {
     @apply text-black text-2xl font-bold px-1;

@@ -9,30 +9,27 @@ export const handleReferenceChange = (setReference) => (newReference) => {
 // seleccion del residuo
 export const handleWasteChange = (selectedOption, setSelectedWaste) => {
   setSelectedWaste(selectedOption)
-  console.log('Residuos seleccionados:', selectedOption)
 }
 
 // peso del residuo
 export const handleWeightChange = (event, setWeight) => {
   const weight = event.target.value
   setWeight(weight)
-  console.log('Peso ingresado:', weight)
 }
 
 // acondicionamiento del residuo
 export const handleOptionsContainer = (event, setOptionsContainer) => {
   const container = event.target.value
   setOptionsContainer(container)
-  console.log('Opción de contenedor seleccionada:', container)
 }
 
 // enviar registro de residuo
-export const handleSubmit = async (e, selectedWaste, weight, optionsContainer, week, year, reference, token, getLoadWaste) => {
+export const handleSubmit = async (e, selectedWaste, weight, optionsContainer, week, year, reference, token, alert, getLoadWaste) => {
   e.preventDefault()
   
   try {
     // Validaciones
-    const { isValid, errors } = validateLoadData({
+      const wasteLoadData = {// Crear el objeto para ser validado
       code: selectedWaste.code,
       container: optionsContainer,
       description: selectedWaste.description,
@@ -40,16 +37,16 @@ export const handleSubmit = async (e, selectedWaste, weight, optionsContainer, w
       weight: weight,
       week: week,
       year: year,
-    })
+    }
 
+    const { isValid, errors } = validateLoadData(wasteLoadData) // Validaciones
     if (!isValid) {
-      console.error('Errores de validación:', errors)
-      alert(errors.join('\n'))
+      // console.error('Errores de validación:', errors)
+      alert(errors.join('\n')) // Mostrar errores si la validación falla
       return
     }
 
-    // Estructura de los datos para enviar
-    const dataLoad = {
+    const dataLoad = { // Estructura de los datos para enviar
       code: selectedWaste.code,
       description: selectedWaste.description,
       weight: weight,
@@ -59,13 +56,12 @@ export const handleSubmit = async (e, selectedWaste, weight, optionsContainer, w
       year: year
     }
 
-    // Enviar datos al servidor
-    await createLoad(dataLoad, token)
+    await createLoad(dataLoad, token)     // Enviar datos al servidor
 
-    alert(`📦 Carga ${dataLoad.description} registrada en ${dataLoad.reference} 🎉`)
-    getLoadWaste()
+    alert(`📦 Carga ${dataLoad.description} registrada en ${dataLoad.reference} 🎉`) // resultado exitoso
+    getLoadWaste() // para refrescar lista
   } catch (error) {
-    console.error('Error registrando carga:', error.message)
-    alert('Error registrando carga:' + error.message)
+    // console.error('Error al registrar la carga:', error)
+    alert('Error al registrar la carga:' + error.message)
   }
 }

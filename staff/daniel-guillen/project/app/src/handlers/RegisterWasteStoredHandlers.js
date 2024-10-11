@@ -4,42 +4,36 @@ import createWaste from '../logic/stored/createWaste'
 // seleccion del residuo
 export const handleWasteChange = (selectedOption, setSelectedWaste) => {
   setSelectedWaste(selectedOption)
-  console.log("Selected waste:", selectedOption)
 }
 
 // peso del residuo
 export const handleWeightChange = (event, setWeight) => {
   const { value } = event.target
   setWeight(value)
-  console.log("Input weight:", value)
 }
 
 // acondicionamiento del residuo
 export const handleOptionsContainer = (event, setOptionsContainer) => {
   const { value } = event.target
   setOptionsContainer(value)
-  console.log("Selected option:", value)
 }
 
 // estado del residuo (correcto o estancado)
 export const handleStatusOptions = (event, setStatusOptions) => {
   const { value } = event.target
   setStatusOptions(value)
-  console.log("Estado del residuo:", value)
 }
 
 // enviar registro de residuo
-export const handleSubmit = async ( e, selectedWaste, weight, optionsContainer, statusOptions, token, getStoredWaste ) => {
+export const handleSubmit = async ( e, selectedWaste, weight, optionsContainer, statusOptions, token, alert, getStoredWaste ) => {
   e.preventDefault()
 
   try {
-    // Obtener mes y año actuales
-    const today = new Date()
+    const today = new Date() // Obtener mes y año actuales
     const month = String(today.getMonth() + 1).padStart(2, '0')
     const year = String(today.getFullYear())
 
-    // Validaciones
-    const { isValid, errors } = validateWasteData({
+    const wasteStoredData = { // Crear el objeto para ser validado
       code: selectedWaste.code,
       container: optionsContainer,
       description: selectedWaste.description,
@@ -47,16 +41,16 @@ export const handleSubmit = async ( e, selectedWaste, weight, optionsContainer, 
       weight: weight,
       month: month,
       year: year,
-    })
+    }
 
+    const { isValid, errors } = validateWasteData(wasteStoredData) // Validaciones
     if (!isValid) {
-      console.error('Errores de validación:', errors)
-      alert(errors.join('\n'))
+      // console.error('Errores de validación:', errors)
+      alert(errors.join('\n')) // Mostrar errores si la validación falla
       return
     }
 
-    // Estructura de los datos para enviar
-    const dataWaste = {
+    const newDataWaste = { // Estructura de los datos para enviar
       code: selectedWaste.code,
       description: selectedWaste.description,
       weight: weight,
@@ -66,14 +60,12 @@ export const handleSubmit = async ( e, selectedWaste, weight, optionsContainer, 
       year: year,
     }
 
-    // Enviar datos al servidor
-    await createWaste(dataWaste, token)
+    await createWaste(newDataWaste, token) // Enviar datos al servidor
 
-    alert(`📦 Residuo Registrado ${selectedWaste.code} ${selectedWaste.description} 🎉`)
-    // Refrescar la lista después de registrar un nuevo residuo
-    getStoredWaste()
+    alert(`📦 Residuo Registrado ${selectedWaste.code} ${selectedWaste.description} 🎉`) // resultado exitoso
+    getStoredWaste() // para refrescar lista
   } catch (error) {
-    console.error('Error registrando el residuo:', error.message)
-    alert('Error registrando el residuo: ' + error.message)
+    // console.error('Error al registrar el residuo:', error)
+    alert('Error al registrar residuo: ' + error.message)
   }
 }

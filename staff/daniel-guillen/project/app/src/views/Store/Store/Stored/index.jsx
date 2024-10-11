@@ -13,10 +13,11 @@ import fetchStoredWaste from '../../../../logic/stored/getWasteStored.js'
 // Handlers
 import { handleWasteChange, handleWeightChange, handleOptionsContainer, handleStatusOptions, handleSubmit } from '../../../../handlers/registerWasteStoredHandlers.js'
 import handleDeleteWaste from '../../../../handlers/deleteWasteStoredHandle.js'
+import { useCustomContext } from '../../../../useContext.jsx'
 
 const Stored = () => {
   const token = sessionStorage.getItem('token') // obtener el token de sessionStorage
-
+  const { alert, confirm } = useCustomContext() // Usar alert y confirm personalizados
   const [data, setData] = useState([]) // almacenar la lista de residuos
   const [loading, setLoading] = useState(true) // mostrar el estado de carga
   const [error, setError] = useState(null) // manejar errores
@@ -26,16 +27,22 @@ const Stored = () => {
   const [optionsContainer, setOptionsContainer] = useState('')
   const [statusOptions, setStatusOptions] = useState('CORRECTO')
 
-  // obtener la lista de residuos del servidor
-  useEffect(() => {
+  useEffect(() => {   // obtener la lista de residuos del servidor
     fetchStoredWaste(token, setData, setLoading, setError)
   }, [token])
 
-  // restablecer los valores por defecto
-  const resetForm = () => {
+  const resetForm = () => {   // restablecer los valores por defecto
     setWeight('') // resetear peso
     setOptionsContainer('') // resetear contenedor
     setStatusOptions('CORRECTO') // resetear estado a "CORRECTO"
+  }
+
+  const handleDelete = (id) => { // manejamos el custom confirm para eliminar residuo
+    confirm({
+      message: '🗑️ ¿Deseas eliminar este Residuo? 📦',
+      onAccept: () => handleDeleteWaste(id, token, setData, setLoading, setError, alert),
+      onCancel: () => alert('🗑️ Eliminación cancelada ❌'),
+    })
   }
 
   return (
@@ -45,7 +52,7 @@ const Stored = () => {
       {/* Registro de residuos */}
       <form
         className='StoreWasteForm' onSubmit={(e) =>
-          handleSubmit(e, selectedWaste, weight, optionsContainer, statusOptions, token, () => {
+          handleSubmit(e, selectedWaste, weight, optionsContainer, statusOptions, token, alert, () => {
             fetchStoredWaste(token, setData, setLoading, setError)
             resetForm() // restablecer los valores de acondicionamiento, peso y estado
           })
@@ -88,10 +95,8 @@ const Stored = () => {
           <div>
             <h2 className='Title'>Residuos almacenados</h2>
 
-            <WasteList
-              data={data}
-              handleDeleteWaste={(id) => handleDeleteWaste(id, token, setData, setLoading, setError)}
-            />
+                <WasteList data={data} onClick={(itemId) => handleDelete(itemId)} />
+
           </div>
         )}
       </div>

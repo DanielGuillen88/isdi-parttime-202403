@@ -2,7 +2,7 @@
 
 @layer components {
   .Header {
-    @apply flex flex-col mt-2 bg-gradient-to-b from-white to-transparent text-center rounded-t-sm;
+    @apply flex flex-col mt-2 bg-gradient-to-b from-white to-transparent text-center rounded-t-md;
   }
   .logo {
     @apply flex justify-center w-full mt-2 mb-0;

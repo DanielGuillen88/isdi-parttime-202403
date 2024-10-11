@@ -2,23 +2,18 @@ import deleteUserById from '../logic/users/deleteUser'
 import fetchAllUsers from '../logic/users/getAllUsers'
 
 // Función para eliminar usuario por ID
-const handleDeleteUser = async (id, token, setData, setLoading, setError) => {
-  const isConfirmed = window.confirm('🗑️ ¿Deseas eliminar este Usuario? 👷‍♂️')
-
-  if (isConfirmed) {
+const handleDeleteUser = async (id, token, setData, setLoading, setError, alert) => {
     try {
-      await deleteUserById(id, token)  // solicitar api eliminar usuario
+      await deleteUserById(id, token)  // pasamos el token al eliminar usuario
       alert('👷‍♂️ Usuario eliminado exitosamente 🎉')
 
-      fetchAllUsers(token, setData, setLoading, setError) // refrescar la lista después de eliminar un usuario
-      // setData(prevData => prevData.filter(user => user.id !== userId)) // Eliminar de la lista localmente sin necesidad de rellamar a fetchAllUsers
+      // refrescar la lista después de eliminar un usuario
+      fetchAllUsers(token, setData, setLoading, setError)
     } catch (error) {
-      console.error('Error al eliminar Usuario:', error)
-      alert(error.message)
+      // console.error('Error al eliminar Usuario:', error)
+      setError(error.message)
+      alert('Error al eliminar Usuario:' + error.message)
     }
-  } else {
-    alert('🗑️ Eliminación cancelada ❌')
-  }
 }
 
 export default handleDeleteUser

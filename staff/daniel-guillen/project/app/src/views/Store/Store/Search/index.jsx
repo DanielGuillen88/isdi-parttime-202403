@@ -5,17 +5,15 @@ import CodeSelect from '../../../../components/store/CodeSelect'
 import GroupedWasteItem from '../../../../components/store/GroupedWasteItem'
 import WasteList from '../../../../components/store/WasteList'
 import MenuStore from '../../../../components/store/MenuStore'
-// Utils
-import sortWasteItems from '../../../../utils/sortWasteItems'
-import calculateTotalWeight from '../../../../utils/calculateTotalWeight'
 // Logic
 import fetchStoredWaste from '../../../../logic/stored/getWasteStoredByCode'
 // Handlers
-import handleDeleteWaste from '../../../../handlers/deleteWasteStoredHandle'
+import handleDeleteWaste from '../../../../handlers/deleteWasteStoredSearchHandle.js'
+import { useCustomContext } from '../../../../useContext.jsx'
 
 const Search = () => {
   const token = sessionStorage.getItem('token') // obtener el token de sessionStorage
-
+  const { alert, confirm } = useCustomContext() // Usar alert y confirm personalizados
   const [data, setData] = useState([])  // almacenar la lista de residuos
   const [loading, setLoading] = useState(false) // mostrar el estado de carga
   const [error, setError] = useState(null) // manejar errores
@@ -25,13 +23,11 @@ const Search = () => {
     setSelectedWaste(selectedWaste)
   }
 
-  // obtener el mes y año actual
-  const today = new Date()
+  const today = new Date()   // obtener fecha fecha, mes y año actual
   const month = String(today.getMonth() + 1).padStart(2, '0')
   const year = String(today.getFullYear())
 
-  // traer los residuos almacenados por codigo de residuo
-  useEffect(() => {
+  useEffect(() => {   // obtener la lista de residuos del servidor
     if (selectedWaste) {
       setLoading(true)
       setTimeout(() => {
@@ -40,11 +36,13 @@ const Search = () => {
     }
   }, [selectedWaste, token, month, year])
 
-  // filtrar y ordenar residuos
-  const sortedList = sortWasteItems(data)
-
-  // calcular el peso total de residuo seleccionado
-  const wasteTotalWeight = calculateTotalWeight(data)
+  const handleDelete = (id) => {  // manejamos el custom confirm para eliminar residuo
+    confirm({
+      message: '🗑️ ¿Deseas eliminar este Residuo? 📦',
+      onAccept: () => handleDeleteWaste(selectedWaste, id, token, setData, setLoading, setError, alert),
+      onCancel: () => alert('🗑️ Eliminación cancelada ❌'),
+    })
+  }
 
   return (
     <div className='SearchWasteDiv'>
@@ -65,13 +63,10 @@ const Search = () => {
           <div>
             <h2 className="Title">Peso total {month}/{year}</h2>
             {/* mostrar el residuo agrupado y su peso total */}
-            <GroupedWasteItem item={wasteTotalWeight} />
+            <GroupedWasteItem data={data} />
             <h2 className="Title">Lista al detalle {month}/{year}</h2>
             {/* mostrar la lista completa de residuos */}
-            <WasteList 
-              data={sortedList} 
-              handleDeleteWaste={(id) => handleDeleteWaste(id, token, setData, setLoading, setError)} 
-            />
+            <WasteList data={data} onClick={(itemId) => handleDelete(itemId)} />
           </div>
         )}
       </div>

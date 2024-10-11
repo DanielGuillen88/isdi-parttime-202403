@@ -1,3 +1,4 @@
+// ordenadr lista de residuos almacenados o cargados en trailer
 const sortWasteItems = (list) => {
   return list.sort((a, b) => {
     // Ordenamos list primero por code

@@ -5,8 +5,6 @@ import GroupedWasteItem from '../../../../components/store/GroupedWasteItem'
 import MenuStore from '../../../../components/store/MenuStore'
 // logic
 import fetchStoredWaste from '../../../../logic/stored/getWasteStored.js'
-// utils
-import groupItemsByCode from '../../../../utils/groupedByCode.js'
 
 const SummaryStore = () => {
   const token = sessionStorage.getItem('token') // obtener el token de sessionStorage
@@ -15,30 +13,20 @@ const SummaryStore = () => {
   const [loading, setLoading] = useState(true) // mostrar el estado de carga
   const [error, setError] = useState(null) // manejar errores
 
-  // obtener la lista de residuos del servidor
-  useEffect(() => {
-    // llamamos a fetchStoredWaste cuando se monta el componente
+  
+  useEffect(() => {// obtener la lista de residuos del servidor
     fetchStoredWaste(token, setData, setLoading, setError)
   }, [token])
 
-    // Cargando...
-    if (loading) {
+    if (loading) { // Cargando...
       return <p style={{ color: 'white', textAlign: 'center', marginTop: '1rem' }}>Cargando resumen de residuos en el almacén...</p>
     }
-  
-    // Mensaje de error
-    if (error) {
+    
+    if (error) { // Mensaje de error
       return <p style={{ color: 'red', textAlign: 'center', marginTop: '1rem' }}>Error al cargar los datos: {error}</p>
     }
 
-  // agrupar, mostrar una sola iteracion y sumar el peso total por residuo
-  const groupedItemCode = groupItemsByCode(data)
-  
-  // ordenamos por código
-  const filteredItems = groupedItemCode.sort((a, b) => a.code.localeCompare(b.code))
-
-  // filtrar residuos estancados (status = 'ESTANCADO') y ordenar por código
-  const stagnantList = data
+  const stagnantList = data   // filtrar residuos estancados (status = 'ESTANCADO') y ordenar por código
   .filter(item => item.status === 'ESTANCADO')
   .sort((a, b) => a.code.localeCompare(b.code))
 
@@ -50,9 +38,7 @@ const SummaryStore = () => {
 
       <h2 className='Title'>Datos resumidos de Residuos:</h2>
 
-      {filteredItems.map(item => (
-        <GroupedWasteItem key={item.id} item={item} />
-      ))}
+      <GroupedWasteItem data={data} />
 
       <h2 className='Title'>Residuos estancados:</h2>
 

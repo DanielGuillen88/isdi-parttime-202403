@@ -31,7 +31,7 @@ const Login = ({ setIsAuthenticated }) => {
         setIsAuthenticated(true) // actualiza el estado de autenticación 
       }, 2000)
     } catch (error) {
-      console.error(error)
+      // console.error(error)
       setMessage(error.message) // mostrar mensaje de error en el FormWithFeedback
     }
   }

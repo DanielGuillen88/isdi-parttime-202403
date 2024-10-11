@@ -6,7 +6,7 @@
   }
 
   .Access {
-    @apply bg-white border-gray-500 rounded-sm border-2 text-2xl p-1;
+    @apply bg-white border-gray-500 rounded-md border-2 text-2xl p-1;
   }
   .AccessOption {
     @apply bg-white border-0 pl-1;

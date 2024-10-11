@@ -1,11 +1,11 @@
 import validateInspectionData from "com/validate/validateInspectionData"
+// logic
 import createInspection from "../logic/vehicles/createInspection"
 import fetchUserName from "../logic/users/getUserName"
 
 // handle vehicle selection
 export const handleVehicleChange = (selectedVehicle, setSelectedVehicle) => {
   setSelectedVehicle(selectedVehicle)
-  console.log("Vehículo seleccionado:", selectedVehicle)
 }
 
 // handle checklist values
@@ -16,7 +16,7 @@ export const handleRadioChange = (id, value, checkList, setCheckList) => {
   setCheckList(updatedCheckList)
 }
 
-export const filterItemsToFix = (checkList) => { // filtrar marcados como "ARREGLAR"
+export const filterItemsToFix = (checkList, alert) => { // filtrar marcados como "ARREGLAR"
   const itemFix = checkList
     .filter(item => item.selectedValue === 'ARREGLAR')
     .map(item => ({ Apartado: item.apartado, Elemento: item.elemento }))
@@ -30,12 +30,11 @@ export const filterItemsToFix = (checkList) => { // filtrar marcados como "ARREG
 }
 
 // enviar registro de inspeccion
-export const saveData = async (selectedVehicle, checkList, inspectionNote, token, navigate) => {
+export const saveData = async (selectedVehicle, checkList, inspectionNote, token, navigate, alert) => {
   try {
     const workerName = await fetchUserName(token)// obtener username
         
     if (!workerName || !selectedVehicle || !checkList) { // Verificar inputs
-      console.error("Faltan datos requeridos para registrar la inspección.")
       alert("Faltan datos requeridos para registrar la inspección.")
       return
     }
@@ -59,7 +58,7 @@ export const saveData = async (selectedVehicle, checkList, inspectionNote, token
       return
     }
 
-    const itemFix = filterItemsToFix(checkList) // Filtrar los elementos que se necesitan arreglar
+    const itemFix = filterItemsToFix(checkList, alert) // Filtrar los elementos que se necesitan arreglar
     if (!itemFix) return
 
     const newInspection = {    // Estructura de los datos para enviar
@@ -73,7 +72,6 @@ export const saveData = async (selectedVehicle, checkList, inspectionNote, token
     alert(`Inspección registrada: ${workerName} - ${selectedVehicle.model} - ${date} 🎉`) // resultado exitoso
     navigate(`/Vehicles/historical/${selectedVehicle.id}`)     // Redireccionar al historial
   } catch (error) {
-    console.error("Error al registrar la inspección:", error)
-    alert("Error al registrar la inspección: " + error.message)
+    alert("Error al registrar inspección: " + error.message)
   }
 }

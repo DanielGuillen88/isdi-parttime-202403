@@ -15,10 +15,9 @@ const fetchAllUsers = async (token, setData, setLoading, setError) => {
 
         const result = await response.json()
         setData(result)
-        console.log('Usuarios recibidos del servidor:', result)
     } catch (error) {
         setError(error.message)
-        console.error('Error al obtener los usuarios registrados:', error)
+        // console.error('Error al obtener los usuarios registrados:', error)
     } finally {
         setLoading(false)
     }

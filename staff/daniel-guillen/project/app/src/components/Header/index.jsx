@@ -1,6 +1,7 @@
 import './index.css'
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import { useCustomContext } from '../../useContext.jsx'
 // img
 import logo from '../img/logo.png'
 import bienvenido from '../img/bienvenido.png'
@@ -11,7 +12,8 @@ import fetchUserName from '../../logic/users/getUserName'
 
 const Header = ({ setIsAuthenticated }) => {
   const navigate = useNavigate()
-  const token = sessionStorage.getItem('token') // obtener el token de sessionStorage
+  const token = sessionStorage.getItem('token') // obtener el token de 
+  const { alert } = useCustomContext()
 
   const [username, setUsername] = useState('')
   const [showLogoutIcon, setShowLogoutIcon] = useState(true)
@@ -61,7 +63,7 @@ useEffect(() => {
   if (token) {
     getUserName()
   }
-}, [token, navigate, setIsAuthenticated])
+}, [token, navigate, setIsAuthenticated, alert])
 
   return (
     <div>

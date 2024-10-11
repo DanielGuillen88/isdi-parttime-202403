@@ -13,8 +13,7 @@ const fetchLoadWaste = async (week, year, reference, token, setData, setLoading,
 
     if (!response.ok) {
       if (response.status === 404) {
-        // no hay datos, porque es una referencia nueva
-        setData([])
+        setData([])// empezamos con array vacia, porque es una referencia nueva
         return
       }
       throw new Error('Error al obtener las cargas almacenadas')

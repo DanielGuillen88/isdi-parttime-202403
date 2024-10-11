@@ -9,52 +9,49 @@ import Button from '../../../../components/core/Button'
 import GroupedWasteItem from '../../../../components/store/GroupedWasteItem'
 import WasteList from '../../../../components/store/WasteList/index.jsx'
 import MenuLoads from '../../../../components/store/MenuLoads'
+// logic
+import fetchLoadWaste from '../../../../logic/departures/getWasteLoad.js'
+// utils
+import getWeekNumberYear from '../../../../utils/getWeekNumberYear'
 // handlers
 import { handleReferenceChange, handleWasteChange, handleWeightChange, handleOptionsContainer, handleSubmit } from '../../../../handlers/registerWasteLoadHandlers.js'
 import handleDeleteWaste from '../../../../handlers/deleteWasteLoadHandle.js'
-// utils
-import getWeekNumberYear from '../../../../utils/getWeekNumberYear'
-import sortWasteItems from '../../../../utils/sortWasteItems'
-import groupItemsByCode from '../../../../utils/groupedByCode.js'
-// logic
-import fetchLoadWaste from '../../../../logic/departures/getWasteLoad.js'
+import { useCustomContext } from '../../../../useContext.jsx'
 
 const Departures = () => {
   const token = sessionStorage.getItem('token') // obtener el token de sessionStorage
-
-  const { week, year } = getWeekNumberYear()
+  const { alert, confirm } = useCustomContext() // Usar alert y confirm personalizados
+  const { week, year } = getWeekNumberYear() // traemos la semana del año
   
-  const [reference, setReference] = useState(sessionStorage.getItem('reference'))
   const [data, setData] = useState([])  // almacenar la lista de residuos
   const [loading, setLoading] = useState(false) // mostrar el estado de carga
   const [error, setError] = useState(null) // manejar errores
-
+  
+  const [reference, setReference] = useState(sessionStorage.getItem('reference'))
   const [selectedWaste, setSelectedWaste] = useState({ code: "", description: "" })
   const [weight, setWeight] = useState("")
   const [optionsContainer, setOptionsContainer] = useState("")
 
-  // obtener la lista de residuos solo si hay referencia
-  useEffect(() => {
+  useEffect(() => {   // obtener la lista de residuos solo si hay referencia
     if (reference) {
       setLoading(true)
       fetchLoadWaste(week, year, reference, token, setData, setLoading, setError)
     }
   }, [token, week, year, reference])
 
-  // al hacer onSubmit restablecer los valores por defecto
-  const resetForm = () => {
+
+  const resetForm = () => { // restablecer los valores por defecto
     setWeight("")            // resetear peso
     setOptionsContainer("")   // resetear contenedor
   }
 
-  // agrupamos, mostramos una sola iteración y sumamos el peso total por residuo
-  const groupedItemCode = groupItemsByCode(data)
-
-  // ordenamos por código lista resumen
-  const filteredItems = groupedItemCode.sort((a, b) => a.code.localeCompare(b.code))
-
-  // ordenamos la lista al detalle
-  const sortedList = sortWasteItems(data)
+  const handleDelete = (id) => { // manejamos el custom confirm para eliminar residuo cargados
+    confirm({
+      message: '🗑️ ¿Deseas eliminar esta Carga? 📦',
+      onAccept: () => handleDeleteWaste(id, token, week, year, reference, setData, setLoading, setError, alert),
+      onCancel: () => alert('🗑️ Eliminación cancelada ❌'),
+    })
+  }
 
   return (
     <div className='Departures'>
@@ -81,14 +78,12 @@ const Departures = () => {
              
               <div className='WeekYear'>
                 <p>{week}/{year}</p>
-              </div>
-            
+              </div>            
               <Button className='SubmitButtonLoad' type='submit'>💾</Button>
             </div>
           </form>
 
-          {/* Lista de residuos almacenados */}
-          <div>
+          <div> {/* Lista de residuos cargados */}
             {loading ? (
               <p style={{ color: 'orange', textAlign: 'center', marginTop: '1rem' }}>Cargando datos de residuos...</p>
             ) : error ? (
@@ -98,15 +93,13 @@ const Departures = () => {
             ) : (
               <div>
                 <h2 className="Title">Residuos cargados {reference}</h2>
-                {filteredItems.map(item => (
-                  <GroupedWasteItem key={item.code} item={item} />
-                ))}
+                
+                  <GroupedWasteItem data={data} />
+                
+                <h2 className="Title">Residuos cargados al detalle</h2>
 
-                {/* Mostrar la lista completa de residuos */}
-                <h2 className="Title">Lista al detalle de residuos</h2>
-                <WasteList data={sortedList} handleDeleteWaste={(id) =>
-                  handleDeleteWaste(id, token, week, year, reference, setData, setLoading, setError)} 
-                />
+                <WasteList data={data} onClick={(itemId) => handleDelete(itemId)} />
+                  
               </div>
             )}
           </div>

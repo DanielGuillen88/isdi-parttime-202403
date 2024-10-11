@@ -1,14 +1,14 @@
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import './index.css'
-//components
+// Components
 import Button from "../../../components/core/Button"
 import Title from '../../../components/core/Title'
-import Text from '../../../components/core/Text'
-// utils y api
-import sortUsers from '../../../utils/sortUsers'
+// Api, utils y handlers
 import fetchAllUsers from '../../../logic/users/getAllUsers'
+import sortUsers from '../../../utils/sortUsers'
 import handleDeleteUser from '../../../handlers/deleteUserHandle'
+import { useCustomContext } from '../../../useContext.jsx'
 
 const UsersList = () => {
   const [data, setData] = useState([])  // almacenar la lista de usuarios
@@ -17,16 +17,21 @@ const UsersList = () => {
 
   const token = sessionStorage.getItem('token') // obtener el token de sessionStorage
   const navigate = useNavigate()
+  const { alert, confirm } = useCustomContext()
 
-  const getUsers = async () => {
-    await fetchAllUsers(token, setData, setLoading, setError)
-  }
-
-    useEffect(() => { // Obtener la lista de usuarios
-      getUsers()
+    useEffect(() => { // Obtener la lista de usuarios del servidor
+      fetchAllUsers(token, setData, setLoading, setError)
   }, [token])
 
   const sortedUsers = sortUsers(data) //ordenamos lista de usuarios
+
+  const handleDelete = (id) => { 
+    confirm({// confirm personalizadoS
+      message: '🗑️ ¿Deseas eliminar este Usuario? 👷',
+      onAccept: () => handleDeleteUser(id, token, setData, setLoading, setError, alert),
+      onCancel: () => alert('🗑️ Eliminación cancelada ❌'),
+    })
+  }
 
   return (
     <div className='UsersList'>
@@ -42,9 +47,9 @@ const UsersList = () => {
         <ul>
           {sortedUsers.map((item) => (
             <li key={item.id}>
-              <Button className={`UserDiv ${item.access}`} onClick={() => handleDeleteUser(item.id, token, setData, setLoading, setError)}>
-                <Text className="UserInfo">Nombre de Usuario:</Text>{item.username}<br/>
-                <Text className="UserInfo">Acceso:</Text>{item.access}
+              <Button className={`UserDiv ${item.access}`} onClick={() => handleDelete(item.id)}>
+                <div className="UserInfo"><p ><strong>Usuario:</strong>&nbsp;{item.username}</p></div>
+                <div className="UserInfo"><p ><strong>Nivel de acceso:</strong>&nbsp;{item.access}</p></div>
               </Button>
             </li>
           ))}

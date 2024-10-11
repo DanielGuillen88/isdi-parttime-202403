@@ -1,10 +1,8 @@
 import deleteLoadById from '../logic/departures/deleteLoad.js'
 import fetchLoadWaste from '../logic/departures/getWasteLoad.js'
 
-const handleDeleteWaste = async (id, token, week, year, reference, setData, setLoading, setError) => {
-  const isConfirmed = window.confirm('🗑️ ¿Deseas eliminar carga seleccionada? 📦')
-
-  if (isConfirmed) {
+// Función para eliminar residuo por ID
+const handleDeleteWaste = async (id, token, week, year, reference, setData, setLoading, setError, alert) => {
     try {
       await deleteLoadById(id, token)  // pasamos el token al eliminar carga
       alert('📦 Carga eliminada exitosamente 🎉')
@@ -12,12 +10,10 @@ const handleDeleteWaste = async (id, token, week, year, reference, setData, setL
       // refrescar la lista después de eliminar una carga
       fetchLoadWaste(week, year, reference, token, setData, setLoading, setError)
     } catch (error) {
-      console.error('Error al eliminar carga:', error)
-      alert(error.message)
+      // console.error('Error al eliminar carga:', error)
+      setError(error.message)
+      alert('Error al eliminar carga:' + error.message)
     }
-  } else {
-    alert('🗑️ Eliminación cancelada ❌')
   }
-}
 
 export default handleDeleteWaste

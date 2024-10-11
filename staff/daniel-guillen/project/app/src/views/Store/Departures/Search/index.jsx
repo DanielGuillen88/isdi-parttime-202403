@@ -5,20 +5,20 @@ import ReferenceSelect from '../../../../components/store/ReferenceSelect'
 import GroupedWasteItem from '../../../../components/store/GroupedWasteItem'
 import WasteList from '../../../../components/store/WasteList'
 import MenuLoads from '../../../../components/store/MenuLoads'
-// utils
-import sortWasteItems from '../../../../utils/sortWasteItems'
-import groupItemsByCode from '../../../../utils/groupedByCode'
 // handlers
 import handleDeleteWaste from '../../../../handlers/deleteLoadSearchedHandle'
+import { useCustomContext } from '../../../../useContext.jsx'
 // logic
 import fetchLoads from '../../../../logic/departures/getWasteLoadSearched'
 
 const Search = () => {
   const token = sessionStorage.getItem('token') // obtener el token de sessionStorage
+  const { alert, confirm } = useCustomContext() // Usar alert y confirm personalizados
   
-  const [data, setData] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
+  const [data, setData] = useState([]) // almacenar la lista de residuos
+  const [loading, setLoading] = useState(false) // mostrar el estado de carga
+  const [error, setError] = useState(null) // manejar errores
+  
   const [selectedReference, setSelectedReference] = useState("")
 
   const handleReferenceChange = (selectedReference) => {
@@ -26,8 +26,7 @@ const Search = () => {
     console.log("Referencia seleccionada:", selectedReference)
   }
 
-  // obtener la lista de residuos solo si hay referencia
-  useEffect(() => {
+  useEffect(() => { // obtener la lista de residuos solo si hay referencia
     if (selectedReference) {
       setLoading(true)
       fetchLoads(selectedReference, token, setData, setLoading, setError)
@@ -36,13 +35,13 @@ const Search = () => {
     }
   }, [token, selectedReference])
 
-  // Agrupar, mostrar una sola iteración y sumar el peso total por código de residuo
-  const groupedItemCode = groupItemsByCode(data)
-  // Ordenar por código
-  const filteredItems = groupedItemCode.sort((a, b) => a.code.localeCompare(b.code))
-
-  // Ordenar lista de residuos al detalle
-  const sortedList = sortWasteItems(data)
+  const handleDelete = (id) => { // manejamos el custom confirm para eliminar residuo cargados
+    confirm({
+      message: '🗑️ ¿Deseas eliminar esta Carga? 📦',
+      onAccept: () => handleDeleteWaste(id, token, selectedReference, setData, setLoading, setError, alert),
+      onCancel: () => alert('🗑️ Eliminación cancelada ❌'),
+    })
+  }
 
   return (
     <div className='LoadSearch'>
@@ -51,25 +50,20 @@ const Search = () => {
         selectedReference={selectedReference}
         handleReferenceChange={handleReferenceChange}
       />
-      <div>
+      <div> {/* Lista de residuos cargados */}
           {!selectedReference || data.length === 0 ? (<p style={{ color: 'white', textAlign: 'center', marginTop: '1rem' }}>No hay residuos cargados, selecciona una referencia.</p>
           ) : loading ? (<p style={{ color: 'orange', textAlign: 'center', marginTop: '1rem' }}>Cargando datos de residuos...</p>
           ) : error ? (<p style={{ color: 'red', textAlign: 'center', marginTop: '1rem' }}>Error al cargar los datos: {error}</p>
           ) : (
           <div>
             <h2 className="Title">Resumen residuos cargados</h2>
-            {filteredItems.map(item => (
-              <GroupedWasteItem key={item.code} item={item} />
-            ))}
-            {/* <h2 className="Title">Residuos cargados</h2> */}
+            
+            <GroupedWasteItem data={data} />
 
-            {/* Mostrar la lista completa de residuos */}
             <h2 className="Title">Lista al detalle de residuos</h2>
-            <WasteList 
-              data={sortedList} 
-              handleDeleteWaste={(id) =>
-                handleDeleteWaste(id, token, selectedReference, setData, setLoading, setError)} 
-            />
+
+            <WasteList data={data} onClick={(itemId) => handleDelete(itemId)} />
+
           </div>
         )}
       </div>

@@ -1,3 +1,4 @@
+// ordenar la lista de usuarios registados
 const sortUsers = (list) => {
   return list.sort((a, b) => {
     // Ordenamos primero por 'access'

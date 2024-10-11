@@ -8,16 +8,17 @@ import InspectionFooter from '../../components/vehicles/InspectionFooter'
 import InspectionSections from '../../components/vehicles/InspectionSections'
 // Handlers
 import { handleVehicleChange, handleRadioChange, saveData } from '../../handlers/registerVehicleInspectionHandlers'
+import { useCustomContext } from '../../useContext'
 // Data
 import small from './inspectionData/checkListSmall.json'
 import medium from './inspectionData/checkListMedium.json'
 import big from './inspectionData/checkListBig.json'
 
-
 const Vehicles = () => {
   const navigate = useNavigate()
   const token = sessionStorage.getItem('token') // obtener el token de sessionStorage
-
+  const { alert } = useCustomContext()
+  
   const [selectedVehicle, setSelectedVehicle] = useState(null)
   const [checkList, setCheckList] = useState([])
   const [inspectionNote, setInspectionNote] = useState('')
@@ -58,7 +59,7 @@ const Vehicles = () => {
         <h2 style={{ color: 'green' }}>Seleccione un vehículo...</h2>
       ) : (
         <>
-          <Button className='HistoricalLink' onClick={() => navigate(`/Vehicles/historical/${id}`)}>HISTORIAL📅</Button>
+          <Button className='HistoricalLink' onClick={() => navigate(`/Vehicles/historical/${id}`)}>Historial de {model}📅</Button>
 
           <InspectionSections checkList={checkList} handleRadioChange={(id, value) => handleRadioChange(id, value, checkList, setCheckList)} />
           
@@ -66,7 +67,7 @@ const Vehicles = () => {
             checkList={checkList}
             inspectionNote={inspectionNote}
             setInspectionNote={setInspectionNote}
-            saveData={() => saveData(selectedVehicle, checkList, inspectionNote, token, navigate)}
+            saveData={() => saveData(selectedVehicle, checkList, inspectionNote, token, navigate, alert)}
           />
         </>
       )}

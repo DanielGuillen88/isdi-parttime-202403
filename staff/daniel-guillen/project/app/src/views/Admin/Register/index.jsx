@@ -11,12 +11,12 @@ import { handleRegisterSubmit, handleAccessChange } from '../../../handlers/regi
 
 const RegisterUser = () => {
     const navigate = useNavigate()
-
+    const token = sessionStorage.getItem('token') // obtener el token de sessionStorage
+    
     const [message, setMessage] = useState('')
     const [level, setLevel] = useState('error') // por defecto los message del formfeedback son rojos
     const [valueAccess, setValueAccess] = useState('')
 
-    const token = sessionStorage.getItem('token') // obtener el token de sessionStorage
 
     return (
         <div className="container">

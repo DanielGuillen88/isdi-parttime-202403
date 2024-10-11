@@ -1,6 +1,6 @@
-const deleteUserById = async (userId, token) => {
+const deleteUserById = async (id, token) => {
   try {
-  const apiResponse = await fetch(`${import.meta.env.VITE_API_URL}users/deleteUser/${userId}`, {
+  const apiResponse = await fetch(`${import.meta.env.VITE_API_URL}users/deleteUser/${id}`, {
       method: 'DELETE',
       headers: {
           'Content-Type': 'application/json',

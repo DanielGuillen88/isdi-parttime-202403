@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
-import './index.css'
-import Header from './components/Header'
 import { Route, Routes, Navigate, BrowserRouter } from 'react-router-dom'
+import './index.css'
+// Components
+import Header from './components/Header'
+import { ContextProvider } from './useContext.jsx'
 // Logic
 import isUserLoggedIn from './logic/users/isUserLoggedIn'
-// UserRoutes
+// Users Routes
 import Login from './views/Login'
 import Home from './views/Home'
 import Admin from './views/Admin'
@@ -23,44 +25,48 @@ import Historical from './views/Vehicles/Historical'
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-
-  useEffect(() => {
-    // Comprobamos si el usuario está autenticado
+  useEffect(() => {// Comprobamos si el usuario está autenticado
     setIsAuthenticated(isUserLoggedIn())
   }, [])
 
-  return (
-    <div className='App'>
-      <BrowserRouter>
-        {/* Pasamos setIsAuthenticated al Header para manejar el logout */}
-        <Header setIsAuthenticated={setIsAuthenticated} />
-        <Routes>
-          {/* Redirige a Home si está autenticado */}
-          <Route path='/Login' element={isAuthenticated ? <Navigate to='/' /> : <Login setIsAuthenticated={setIsAuthenticated} />} />
+  return(
+      <ContextProvider>
 
-          {/* Rutas privadas (protegidas por autenticación) */}{
-            isAuthenticated ? < > 
-            <Route path='/' element={ <Home /> } />
-            <Route path='/Admin' element={ <Admin /> } />
-            <Route path='/Admin/Register' element={ <Register /> } />
-            <Route path='/Admin/Users' element={ <Users /> } />
-  
-            <Route path='/Store' element={ <Store /> } />
-            <Route path='/Store/Stored' element={ <Stored /> } />
-            <Route path='/Store/Summary' element={ <Summary /> } />
-            <Route path='/Store/Search' element={ <Search /> } />
-  
-            <Route path='/Departures' element={ <Departures /> } />
-            <Route path='/Departures/Search' element={ <SearchLoad /> } />
-  
-            <Route path='/Vehicles' element={ <Vehicles /> } />
-            <Route path='/Vehicles/Historical/:vehicleId' element={ <Historical /> } />
-            
-            </> : <Route path='/*' element={ <Login setIsAuthenticated={setIsAuthenticated} />} /> 
-        }
-        </Routes>
-      </BrowserRouter>
-    </div>
+      <div className='App'>
+        <BrowserRouter>
+          {/* Pasamos setIsAuthenticated al Header para manejar el logout */}
+          <Header setIsAuthenticated={setIsAuthenticated} />
+          <Routes>
+            {/* Redirige a Home si está autenticado */}
+            <Route path='/Login' element={isAuthenticated ? <Navigate to='/' /> : <Login setIsAuthenticated={setIsAuthenticated} />} />
+
+            {/* Rutas privadas (protegidas por autenticación) */}
+            {isAuthenticated ? (
+              <>
+                <Route path='/' element={<Home />} />
+                <Route path='/Admin' element={<Admin />} />
+                <Route path='/Admin/Register' element={<Register />} />
+                <Route path='/Admin/Users' element={<Users />} />
+
+                <Route path='/Store' element={<Store />} />
+                <Route path='/Store/Stored' element={<Stored />} />
+                <Route path='/Store/Summary' element={<Summary />} />
+                <Route path='/Store/Search' element={<Search />} />
+
+                <Route path='/Departures' element={<Departures />} />
+                <Route path='/Departures/Search' element={<SearchLoad />} />
+
+                <Route path='/Vehicles' element={<Vehicles />} />
+                <Route path='/Vehicles/Historical/:vehicleId' element={<Historical />} />
+              </>
+            ) : (
+              <Route path='/*' element={<Login setIsAuthenticated={setIsAuthenticated} />} />
+            )}
+          </Routes>
+        </BrowserRouter>
+        </div>
+
+        </ContextProvider>
   )
 }
 

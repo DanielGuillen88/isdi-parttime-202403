@@ -1,3 +1,4 @@
+// traer la semana del año actual
 const getWeekNumberYear = () => {
   const today = new Date()  // Fecha actual
   const startOfYear = new Date(today.getFullYear(), 0, 1)

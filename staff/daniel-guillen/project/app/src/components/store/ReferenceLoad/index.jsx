@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useCustomContext } from '../../../useContext'
 import './index.css'
 // components
 import Button from '../../core/Button'
@@ -6,6 +7,8 @@ import Text from '../../core/Text'
 
 const ReferenceLoad = ({ reference, onReferenceChange }) => {
   const [inputValue, setInputValue] = useState('')
+  // const { alert } = useCustomContext()
+  const { alert, confirm } = useCustomContext() // Usar alert y confirm personalizados
 
   // cargar valor de sessionStorage si existe
   useEffect(() => {
@@ -28,15 +31,20 @@ const ReferenceLoad = ({ reference, onReferenceChange }) => {
     }
   }
 
-  // eliminar valor del sessionStorage con alert
+  // // eliminar valor del sessionStorage con ventana personalizada
   const handleDelete = () => {
-    const confirmDelete = window.confirm('🗑️ ¿Estás seguro de que deseas eliminar la referencia guardada? 💾')
-    if (confirmDelete) {
-      sessionStorage.removeItem('reference')
-      onReferenceChange('') // pasamos prop hacia el componente padre
-      setInputValue('')
-      alert('🗑️ Referencia eliminada de sessionStorage 🎉')
-    }
+    confirm({
+      message: '🗑️ ¿Estás seguro de que deseas eliminar la referencia? 📦',
+      onAccept: () => {
+        sessionStorage.removeItem('reference')
+        onReferenceChange('') // Pasamos prop hacia el componente padre
+        setInputValue('')
+        alert('🗑️ Referencia eliminada de sessionStorage 🎉')
+      },
+      onCancel: () => {
+        alert('🗑️ Eliminación cancelada ❌')
+      },
+    })
   }
 
   return (
