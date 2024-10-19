@@ -1,7 +1,7 @@
 import './index.css'
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { useCustomContext } from '../../useContext.jsx'
+import { useCustomContext } from '../../useContext.js'
 // img
 import logo from '../img/logo.png'
 import bienvenido from '../img/bienvenido.png'
@@ -22,8 +22,8 @@ const Header = ({ setIsAuthenticated }) => {
   const handleLogout = () => {
     logoutUser() // Eliminamos sessionStorage
     setIsAuthenticated(false)
+    alert('Hasta pronto 👋') 
     navigate('/Login') // Redirecciona a /Login
-    alert('Hasta pronto 👋')
   }
 
   // Efecto 'mágico' para mostrar/ocultar el botón logout
@@ -48,15 +48,11 @@ useEffect(() => {
       const username = await fetchUserName(token) // Llamar a fetchUserName con token
       setUsername(username)
     } catch (error) {
-      console.log('Error en la solicitud, getUserName')
-      
-      // Ejecutar la redirección con un retraso de 2 segundos
-      setTimeout(() => {
-        setIsAuthenticated(false) // Actualizar estado de autenticación
-        logoutUser()
-        navigate('/Login') // Redirecciona a /Login
-        alert('Hasta pronto 👋')
-      }, 2000)
+      console.error('Error en la solicitud, getUserName')
+      logoutUser() // Eliminamos sessionStorage
+      setIsAuthenticated(false)
+      alert('Hasta pronto 👋')
+      navigate('/Login') // Redirecciona a /Login
     }
   }
 

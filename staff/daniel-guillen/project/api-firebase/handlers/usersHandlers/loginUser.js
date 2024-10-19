@@ -3,15 +3,16 @@ import { db } from '../../firebase.js'
 import bcryptjs from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 // validation
-import { validateUsernameAndPassword } from 'com/validate/validateCreateUser.js'
+import validate from 'com/validate/validateUsers.js'
 
 // Handler para la autenticacion de usuario
 const loginUser = async (req, res) => {
     const { username, password } = req.body
     
-    try {
-        // Validación de los inputs
-        validateUsernameAndPassword(username, password)
+      // Validar los datos de usuario
+      try{
+        validate.username(username)
+        validate.password(password)
 
         const userQuery = await db.collection('users').where('username', '==', username).get()
 

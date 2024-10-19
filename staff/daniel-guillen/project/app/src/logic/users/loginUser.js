@@ -1,32 +1,37 @@
+import { SystemError, ValidationError } from "../../../../com/errors"
+
 const loginUser = async (username, password) => {
     try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}users/login`, {
+        const apiResponse = await fetch(`${import.meta.env.VITE_API_URL}users/login`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ username, password })
+            body: JSON.stringify({ username, password }),
         })
 
-        if (!response.ok) { // si no hay exito en la autenticacion
+        // Manejar respuesta no exitosa
+        if (!apiResponse.ok) {
             let errorData
             try {
-                errorData = await response.json() // al obtener el string
+                errorData = await apiResponse.json()  // Intentar obtener el error del servidor
             } catch (error) {
-                errorData = { message: 'Error desconocido' } // error generico
+                errorData = { message: 'Error desconocido' }  // Error genérico si no se puede obtener el error del servidor
             }
-            // lanza el error con el mensaje del servidor(como usuario no existe o contraseña no valida) o uno por defecto
-            throw new Error(errorData.message || 'Error al iniciar sesión')
+            // Lanzar un ValidationError con el mensaje del servidor o un mensaje por defecto
+            throw new ValidationError(errorData.message || 'Error al iniciar sesión')
         }
 
-        // autenticacion exitosa
-        const data = await response.json()
-        sessionStorage.setItem('token', data.token)
+        // Autenticación exitosa
+        const data = await apiResponse.json()  // Convertir la respuesta en JSON
+        sessionStorage.setItem('token', data.token)  // Guardar el token en sessionStorage
         return data
 
-    } catch (error) {
-        console.error('Error en el servidor:', error.message) // Muestra el mensaje específico
-        throw new Error(error.message || 'Error en el servidor.')
+    } catch (err) {
+        if (err.name === 'TypeError' && err.message === 'Failed to fetch') {
+            throw new SystemError('No se pudo conectar al servidor. Verifica tu conexión o intenta más tarde.');
+          }
+        throw new SystemError(err.message || 'Error inesperado en el servidor')
     }
 }
 

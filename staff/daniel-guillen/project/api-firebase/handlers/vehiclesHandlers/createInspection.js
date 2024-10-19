@@ -1,46 +1,39 @@
 import { db } from '../../firebase.js'
-import validateInspectionData from 'com/validate/validateInspectionData.js'
+import validate from 'com/validate/validateVehicles.js'
+import { ContentError } from 'com/errors.js'
 
-const createInspection = async (req, res) => {
+const createInspection = async (req, res, next) => {
   try {
     const { vehicle, inspection, worker } = req.body
 
-    // Preparar los datos para la validación
-    const inspectionData = {
-      workerName: worker.workerName,
-      selectedVehicle: vehicle,
-      checkList: inspection.itemFix,
-      inspectionNote: inspection.notes,
-      month: worker.month,
-      year: worker.year
+    // Validar los datos de inspeccion
+    try {
+      validate.vehicle(vehicle)
+      validate.inspection(inspection)
+      validate.worker(worker)
+    } catch (validationError) {
+      return next(new ContentError(validationError.message))
     }
-
-    const { isValid, errors } = validateInspectionData(inspectionData) // Validar los datos recibidos
-
-    if (!isValid) {
-      console.log('Errores de validación:', errors)
-      return res.status(400).json({ message: errors.join(', ') })
-    }
-
-    const newInspection = {  // Estructura de datos para guardar
+    // Crear el objeto de carga
+    const newInspection = {
       vehicle: { id: vehicle.id, model: vehicle.model, size: vehicle.size },
-      inspection: { itemFix: inspection.itemFix, notes: inspection.notes },
+      inspection: { itemFix: inspection.itemFix, notes: inspection.inspectionNote },
       worker: { workerName: worker.workerName, month: worker.month, year: worker.year, date: worker.date }
     }
 
-    const InspectionRef = await db.collection('inspections').add(newInspection) // Guardar la inspección en Firestore
+    // Guardar en la base de datos (Firebase)
+    const InspectionRef = await db.collection('inspections').add(newInspection)
 
     console.log(`Inspección registrada: ${vehicle.model} - ${worker.workerName}- ${worker.date}`)
-
-    res.status(201).json({ // Respuesta exitosa
+    // Respuesta exitosa
+    res.status(201).json({
       message: 'Nueva inspección registrada',
       InspectionRef: InspectionRef.id,
       Vehiculo: vehicle.model,
       Worker: worker.workerName,
     })
   } catch (error) {
-    console.error('Error al registrar inspección', error)
-    res.status(500).json({ message: 'Error al registrar inspección' })
+    next(error)
   }
 }
 

@@ -1,24 +1,30 @@
 import { db } from '../../firebase.js'
-import validateWasteData from '../../../com/validate/validateWasteData.js'
+import validate from '../../../com/validate/validateStored.js'
 
 const createWaste = async (req, res) => { // Handler para crear un residuo almacenado
   try {
     const { code, container, description, status, weight, month, year } = req.body
 
-    const { isValid, errors } = validateWasteData({ code, container, description, status, weight, month, year })
-
-    if (!isValid) {
-      console.log('Errores de validación:', errors)
-      return res.status(400).json({ message: errors.join(', ') })
-    }1
-
-    const newWaste = { code, container, description, status, weight, month, year } // Estructura del nuevo residuo
-
-    const wasteRef = await db.collection('storedWaste').add(newWaste) // Agregar el nuevo residuo a la colección 'storedWaste'
+    try { // Validar los datos del residuo
+      validate.code(code)
+      validate.container(container)
+      validate.description(description)
+      validate.status(status)
+      validate.weight(weight)
+      validate.month(month)
+      validate.year(year)
+    } catch (validationError) {
+      console.log('Errores de validación:', validationError.message)
+      return res.status(400).json({ message: validationError.message })
+    }
+    // Si las validaciones pasan, crear el objeto
+    const newWaste = { code, container, description, status, weight, month, year }
+    // Guardar en la base de datos (Firebase)
+    const wasteRef = await db.collection('storedWaste').add(newWaste)
 
     console.log(`Residuo registrado: ${code} - ${description}`)
-
-    res.status(201).json({ // Respuesta exitosa
+    // Respuesta exitosa
+    res.status(201).json({
       message: 'Nuevo residuo registrado',
       WasteId: wasteRef.id,
       code: newWaste.code,

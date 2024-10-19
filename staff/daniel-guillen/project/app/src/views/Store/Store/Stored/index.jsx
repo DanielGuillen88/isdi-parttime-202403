@@ -11,9 +11,9 @@ import MenuStore from '../../../../components/store/MenuStore'
 // Logic
 import fetchStoredWaste from '../../../../logic/stored/getWasteStored.js'
 // Handlers
-import { handleWasteChange, handleWeightChange, handleOptionsContainer, handleStatusOptions, handleSubmit } from '../../../../handlers/registerWasteStoredHandlers.js'
-import handleDeleteWaste from '../../../../handlers/deleteWasteStoredHandle.js'
-import { useCustomContext } from '../../../../useContext.jsx'
+import { handleWasteChange, handleWeightChange, handleOptionsContainer, handleStatusOptions, handleSubmit } from '../../../../handlers/stored/registerWasteStoredHandlers.js'
+import handleDeleteWaste from '../../../../handlers/stored/deleteWasteStoredHandle.js'
+import { useCustomContext } from '../../../../useContext.js'
 
 const Stored = () => {
   const token = sessionStorage.getItem('token') // obtener el token de sessionStorage
@@ -45,14 +45,18 @@ const Stored = () => {
     })
   }
 
+  const today = new Date() // Obtener mes y año actuales
+  const month = String(today.getMonth() + 1).padStart(2, '0')
+  const year = String(today.getFullYear())
+
   return (
     <div className='Stored'>
-      <h1 className='RouteTitle'>INVENTARIO</h1>
+      <h1 className='RouteTitle'>INVENTARIO {month}/{year}</h1>
 
       {/* Registro de residuos */}
       <form
         className='StoreWasteForm' onSubmit={(e) =>
-          handleSubmit(e, selectedWaste, weight, optionsContainer, statusOptions, token, alert, () => {
+          handleSubmit(e, selectedWaste, weight, optionsContainer, statusOptions, month, year, token, alert, () => {
             fetchStoredWaste(token, setData, setLoading, setError)
             resetForm() // restablecer los valores de acondicionamiento, peso y estado
           })

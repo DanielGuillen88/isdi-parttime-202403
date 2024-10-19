@@ -1,12 +1,9 @@
-import { createContext, useState, useContext } from 'react'
+import { useState } from 'react'
+import { Context } from './useContext.js'
 import Alert from './components/core/Alert'
 import Confirm from './components/core/Confirm'
 
-export const Context = createContext()
-
-export const useCustomContext = () => useContext(Context)
-
-export const ContextProvider = ({ children }) => {
+const ContextProvider = ({ children }) => {
   const [message, setMessage] = useState(null) // Estado para alertas
   const [confirmOptions, setConfirmOptions] = useState(null) // Estado para confirmación
 
@@ -27,18 +24,17 @@ export const ContextProvider = ({ children }) => {
 
   const handleConfirmAccept = () => {
     if (confirmOptions?.onAccept) {
-      confirmOptions.onAccept();
+      confirmOptions.onAccept()
     }
-    setConfirmOptions(null);
-  };
+    setConfirmOptions(null)
+  }
   
   const handleConfirmCancel = () => {
     if (confirmOptions?.onCancel) {
-      confirmOptions.onCancel();
+      confirmOptions.onCancel()
     }
-    setConfirmOptions(null);
-  };
-  
+    setConfirmOptions(null)
+  }
 
   return (
     <Context.Provider value={{ alert, confirm }}>
@@ -55,3 +51,4 @@ export const ContextProvider = ({ children }) => {
   )
 }
 
+export default ContextProvider

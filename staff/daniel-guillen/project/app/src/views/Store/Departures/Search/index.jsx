@@ -6,8 +6,8 @@ import GroupedWasteItem from '../../../../components/store/GroupedWasteItem'
 import WasteList from '../../../../components/store/WasteList'
 import MenuLoads from '../../../../components/store/MenuLoads'
 // handlers
-import handleDeleteWaste from '../../../../handlers/deleteLoadSearchedHandle'
-import { useCustomContext } from '../../../../useContext.jsx'
+import handleDeleteWaste from '../../../../handlers/departures/deleteLoadSearchedHandle'
+import { useCustomContext } from '../../../../useContext.js'
 // logic
 import fetchLoads from '../../../../logic/departures/getWasteLoadSearched'
 
@@ -23,7 +23,6 @@ const Search = () => {
 
   const handleReferenceChange = (selectedReference) => {
     setSelectedReference(selectedReference)
-    console.log("Referencia seleccionada:", selectedReference)
   }
 
   useEffect(() => { // obtener la lista de residuos solo si hay referencia

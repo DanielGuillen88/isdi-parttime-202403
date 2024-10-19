@@ -10,7 +10,7 @@ const Home = () => {
   const navigate = useNavigate() 
 
   return (
-    <div className='Home'>
+    <div className='home'>
       <Button onClick={() => navigate('/Store')}>
         <img className='image' src={store} alt="Store" />
       </Button>

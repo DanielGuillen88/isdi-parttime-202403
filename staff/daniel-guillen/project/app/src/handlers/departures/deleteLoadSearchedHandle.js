@@ -1,5 +1,5 @@
-import deleteLoadById from '../logic/departures/deleteLoad.js'
-import fetchLoads from '../logic/departures/getWasteLoadSearched.js'
+import deleteLoadById from '../../logic/departures/deleteLoad.js'
+import fetchLoads from '../../logic/departures/getWasteLoadSearched.js'
 
 // Función para eliminar residuo por ID
 const handleDeleteWaste = async (id, token, selectedReference, setData, setLoading, setError, alert) => {

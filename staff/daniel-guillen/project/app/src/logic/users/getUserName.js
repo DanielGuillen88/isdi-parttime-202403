@@ -1,6 +1,8 @@
+import { SystemError, NotFoundError } from "../../../../com/errors"
+
 const fetchUserName = async (token) => {
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}users/getUserName`, {
+    const apiResponse = await fetch(`${import.meta.env.VITE_API_URL}users/getUserName`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -8,15 +10,15 @@ const fetchUserName = async (token) => {
       }
     })
 
-    if (!response.ok) {
-      throw new Error('Error al obtener username')
+    const data = await apiResponse.json()
+
+    if (!apiResponse.ok) { // Primero si la respuesta no fue exitosa con servidor
+      throw new NotFoundError(data.message || 'Error al obtener datos de usuario')
     }
 
-    const data = await response.json()
-    return data.username // Devolvemos el nombre de usuario
+    return data.username // Devolvemos datos de usuario, de momento solo nombre de usuario(Prox. access)
   } catch (err) {
-    console.error('Error al obtener el nombre de usuario:', err)
-    throw new Error('Error en la solicitud')
+    throw new SystemError(err.message || 'Error inesperado en el servidor')
   }
 }
 

@@ -1,24 +1,27 @@
-const createNewUser = async (username, password, access, token) => {
-    try {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}users/createUser`, {
+import { SystemError } from "../../../../com/errors"
+
+const createNewUser = async (newDataUser, token) => {
+try {
+    const apiResponse = await fetch(`${import.meta.env.VITE_API_URL}users/createUser`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ username, access, password }),
+        body: JSON.stringify(newDataUser),
     })
     
-    const result = await response.json()
+    const result = await apiResponse.json()
 
-    if (!response.ok) {
-        throw new Error(result.message || 'Error al registrar usuario')
+    // Primero si la respuesta no fue exitosa con servidor
+    if (!apiResponse.ok) {
+        throw new SystemError(result.message || 'Error al crear usuario')
+      }
+      return result
+    } catch (err) {
+      // Lanzar el error completo y no solo el mensaje
+      throw new SystemError(err.message || 'Error inesperado en el servidor')
     }
+}
 
-    return result
-} catch (error) {
-  console.error('Error al registrar el usuario:', error.message)
-  throw new Error('Error al registrar el usuario: ' + error.message)
-}
-}
 export default createNewUser

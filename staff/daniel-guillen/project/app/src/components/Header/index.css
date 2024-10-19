@@ -8,7 +8,7 @@
     @apply flex justify-center w-full mt-2 mb-0;
   }
   .sessionStatus {
-    @apply flex justify-center text-orange-500 items-center leading-none;
+    @apply flex justify-center text-orange-500 items-center leading-none mb-1;
   }
   .logout-icon {
     @apply fixed top-2 right-0 cursor-pointer z-[1000] transition-opacity duration-300;

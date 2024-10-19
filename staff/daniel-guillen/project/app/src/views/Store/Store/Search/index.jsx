@@ -8,8 +8,8 @@ import MenuStore from '../../../../components/store/MenuStore'
 // Logic
 import fetchStoredWaste from '../../../../logic/stored/getWasteStoredByCode'
 // Handlers
-import handleDeleteWaste from '../../../../handlers/deleteWasteStoredSearchHandle.js'
-import { useCustomContext } from '../../../../useContext.jsx'
+import handleDeleteWaste from '../../../../handlers/stored/deleteWasteStoredSearchHandle.js'
+import { useCustomContext } from '../../../../useContext.js'
 
 const Search = () => {
   const token = sessionStorage.getItem('token') // obtener el token de sessionStorage

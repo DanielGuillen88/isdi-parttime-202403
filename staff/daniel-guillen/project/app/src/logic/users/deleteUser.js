@@ -1,3 +1,5 @@
+import { SystemError } from "../../../../com/errors"
+
 const deleteUserById = async (id, token) => {
   try {
   const apiResponse = await fetch(`${import.meta.env.VITE_API_URL}users/deleteUser/${id}`, {
@@ -8,14 +10,16 @@ const deleteUserById = async (id, token) => {
       },
     })
 
+    // Primero si la respuesta no fue exitosa con servidor
     if (!apiResponse.ok) {
-        const result = await apiResponse.json()
-        throw new Error(result.message || 'Error al eliminar usuario')
+      const errorResponse = await apiResponse.json()
+      throw new SystemError(errorResponse.message || 'Error al eliminar usuario')
     }
 
-  return { message: 'Usuario eliminado exitosamente' }
-  } catch (error) {
-    throw new Error('Error eliminando usuario. Inténtalo de nuevo más tarde.')
+    return { message: 'Usuario eliminado exitosamente' }
+  } catch (err) {
+    // Lanzar el error completo y no solo el mensaje
+    throw new SystemError(err.message || 'Error inesperado en el servidor')
   }
 }
   

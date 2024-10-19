@@ -6,7 +6,7 @@ import Button from "../../components/core/Button"
 // logic
 import loginUser from "../../logic/users/loginUser"
 // validation
-import { validateUsernameAndPassword } from 'com/validate/validateCreateUser'
+import validate from 'com/validate/validateUsers'
 
 const Login = ({ setIsAuthenticated }) => {
   const [message, setMessage] = useState('')
@@ -19,9 +19,9 @@ const Login = ({ setIsAuthenticated }) => {
     const username = form.username.value.trim()
     const password = form.password.value.trim()
 
-    try {
-      // validar inputs
-      validateUsernameAndPassword(username, password)
+    try{
+      validate.username(username)
+      validate.password(password)
       
       await loginUser(username, password) // llamada a la API para iniciar sesión
       setMessage(`👋 Bienvenido ${username}!🎉`)

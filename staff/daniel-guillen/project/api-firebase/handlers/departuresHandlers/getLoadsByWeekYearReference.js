@@ -1,5 +1,5 @@
 import { db } from '../../firebase.js'
-import getWeekNumberYear from './getWeekNumberYear.js'
+import getWeekNumberYear from '../getWeekNumberYear.js'
 
 const { week, year } = getWeekNumberYear()
 
@@ -34,7 +34,8 @@ const getLoadsByWYR = async (req, res) => {
 
     if (querySnapshot.empty) {
       console.log(`No se encontraron documentos con la semana: ${week}, año ${year} y referencia ${reference}.`)
-      return res.status(404).json({ message: `No se encontraron documentos con la semana: ${week}, año ${year} y referencia ${reference}.` })
+      // return res.status(404).json({ message: `No se encontraron documentos con la semana: ${week}, año ${year} y referencia ${reference}.` })
+      return res.status(200).json([])
     }
 
     // Mapear los documentos obtenidos

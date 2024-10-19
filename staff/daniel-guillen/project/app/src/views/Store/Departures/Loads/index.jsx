@@ -14,9 +14,9 @@ import fetchLoadWaste from '../../../../logic/departures/getWasteLoad.js'
 // utils
 import getWeekNumberYear from '../../../../utils/getWeekNumberYear'
 // handlers
-import { handleReferenceChange, handleWasteChange, handleWeightChange, handleOptionsContainer, handleSubmit } from '../../../../handlers/registerWasteLoadHandlers.js'
-import handleDeleteWaste from '../../../../handlers/deleteWasteLoadHandle.js'
-import { useCustomContext } from '../../../../useContext.jsx'
+import { handleReferenceChange, handleWasteChange, handleWeightChange, handleOptionsContainer, handleSubmit } from '../../../../handlers/departures/registerWasteLoadHandlers.js'
+import handleDeleteWaste from '../../../../handlers/departures/deleteWasteLoadHandle.js'
+import { useCustomContext } from '../../../../useContext.js'
 
 const Departures = () => {
   const token = sessionStorage.getItem('token') // obtener el token de sessionStorage
@@ -24,7 +24,7 @@ const Departures = () => {
   const { week, year } = getWeekNumberYear() // traemos la semana del año
   
   const [data, setData] = useState([])  // almacenar la lista de residuos
-  const [loading, setLoading] = useState(false) // mostrar el estado de carga
+  const [loading, setLoading] = useState(true) // mostrar el estado de carga
   const [error, setError] = useState(null) // manejar errores
   
   const [reference, setReference] = useState(sessionStorage.getItem('reference'))
@@ -34,7 +34,6 @@ const Departures = () => {
 
   useEffect(() => {   // obtener la lista de residuos solo si hay referencia
     if (reference) {
-      setLoading(true)
       fetchLoadWaste(week, year, reference, token, setData, setLoading, setError)
     }
   }, [token, week, year, reference])
@@ -64,7 +63,7 @@ const Departures = () => {
       ) : (
         <>
           <form className='TruckLoadForm' onSubmit={(e) =>
-            handleSubmit(e, selectedWaste, weight, optionsContainer, week, year, reference, token, () => {
+            handleSubmit(e, selectedWaste, weight, optionsContainer, week, year, reference, token, alert, () => {
               fetchLoadWaste(week, year, reference, token, setData, setLoading, setError)
               resetForm()  // restablecer los valores acondicionamiento y peso
             })

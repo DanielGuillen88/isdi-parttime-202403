@@ -7,7 +7,7 @@ import VehiclesSelect from '../../components/vehicles/VehicleSelect'
 import InspectionFooter from '../../components/vehicles/InspectionFooter'
 import InspectionSections from '../../components/vehicles/InspectionSections'
 // Handlers
-import { handleVehicleChange, handleRadioChange, saveData } from '../../handlers/registerVehicleInspectionHandlers'
+import { handleVehicleChange, handleRadioChange, saveData } from '../../handlers/vehicles/registerVehicleInspectionHandlers'
 import { useCustomContext } from '../../useContext'
 // Data
 import small from './inspectionData/checkListSmall.json'

@@ -1,26 +1,24 @@
+import { SystemError } from "../../../../com/errors"
+
 const fetchCodesWasteStored = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}stored/getAllCodesStored`, {
+      const apiResponse = await fetch(`${import.meta.env.VITE_API_URL}stored/getAllCodesStored`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
       })
   
-      if (!response.ok) {
-        throw new Error('Error al obtener lista de códigos')
+      const result = await apiResponse.json()
+  
+      // Primero si la respuesta no fue exitosa con servidor
+      if (!apiResponse.ok) {
+        throw new SystemError(result.message || 'Error al obtener lista de códigos')
       }
-  
-      const result = await response.json()
-  
-      // Formatear los datos para react-select
-      return result.map((item) => ({
-        value: item.code,
-        label: `${item.code} - ${item.description}`
-      }))
-    } catch (error) {
-      console.error('Error al obtener lista de códigos', error)
-      return [] // devolver un array vacio en caso de error
+      return result
+    } catch (err) {
+      // Lanzar el error completo y no solo el mensaje
+      throw new SystemError(err.message || 'Error al obtener lista de códigos')
     }
   }
   

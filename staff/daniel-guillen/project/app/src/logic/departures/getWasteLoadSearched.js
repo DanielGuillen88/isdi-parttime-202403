@@ -1,7 +1,10 @@
+import { SystemError } from "../../../../com/errors"
+
 const fetchLoads = async (selectedReference, token, setData, setLoading, setError) => {
     try {
       setLoading(true)
-      const response = await fetch(`${import.meta.env.VITE_API_URL}departures/getAllLoads/${selectedReference}`, {
+
+      const apiResponse = await fetch(`${import.meta.env.VITE_API_URL}departures/getAllLoads/${selectedReference}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -9,20 +12,18 @@ const fetchLoads = async (selectedReference, token, setData, setLoading, setErro
         },
       })
   
-      if (!response.ok) {
-        throw new Error('Error al obtener las cargas almacenadas')
+      const result = await apiResponse.json()
+
+      if (!apiResponse.ok) { // Primero si la respuesta no fue exitosa con servidor
+        throw new SystemError(result.message || 'Error al obtener las cargas almacenadas')
       }
-  
-      const result = await response.json()
-      setData(result)
-      console.log(result)
-    } catch (error) {
-      setError(error.message)
-      console.error('Error al obtener las cargas almacenadas:', error)
+
+    setData(result) // datos si la solicitud fue exitosa
+    } catch (err) {
+    // Lanzar el error completo y no solo el mensaje
+    setError(err.message || 'Error inesperado al obtener las cargas almacenadas')
     } finally {
-      setTimeout(() => {
-        setLoading(false)
-      }, 1000)
+    setLoading(false)
     }
   }
   

@@ -1,5 +1,5 @@
-import deleteUserById from '../logic/users/deleteUser'
-import fetchAllUsers from '../logic/users/getAllUsers'
+import deleteUserById from '../../logic/users/deleteUser'
+import fetchAllUsers from '../../logic/users/getAllUsers'
 
 // Función para eliminar usuario por ID
 const handleDeleteUser = async (id, token, setData, setLoading, setError, alert) => {
@@ -12,7 +12,7 @@ const handleDeleteUser = async (id, token, setData, setLoading, setError, alert)
     } catch (error) {
       // console.error('Error al eliminar Usuario:', error)
       setError(error.message)
-      alert('Error al eliminar Usuario:' + error.message)
+      alert('Error al eliminar Usuario:' + error)
     }
 }
 

@@ -7,8 +7,8 @@ import Title from '../../../components/core/Title'
 // Api, utils y handlers
 import fetchAllUsers from '../../../logic/users/getAllUsers'
 import sortUsers from '../../../utils/sortUsers'
-import handleDeleteUser from '../../../handlers/deleteUserHandle'
-import { useCustomContext } from '../../../useContext.jsx'
+import handleDeleteUser from '../../../handlers/users/deleteUserHandle'
+import { useCustomContext } from '../../../useContext.js'
 
 const UsersList = () => {
   const [data, setData] = useState([])  // almacenar la lista de usuarios

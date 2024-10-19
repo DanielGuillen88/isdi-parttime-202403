@@ -1,5 +1,5 @@
-import createNewUser from '../logic/users/createNewUser'
-import { validateUserRegistration } from 'com/validate/validateCreateUser'
+import createNewUser from '../../logic/users/createNewUser'
+import validate from 'com/validate/validateUsers'
 
 export const handleRegisterSubmit = async (event, valueAccess, setMessage, setLevel, token, navigate) => {
     event.preventDefault()
@@ -8,18 +8,24 @@ export const handleRegisterSubmit = async (event, valueAccess, setMessage, setLe
     const username = form.username.value
     const password = form.password.value
     const passwordRepeat = form.passwordRepeat.value
-
-    try {    
-        // Validación de los datos del usuario
-        validateUserRegistration(username, password, passwordRepeat, valueAccess) 
+        // Realizar las validaciones
+    try{
+        validate.username(username)
+        validate.password(password)
+        validate.passwordRepeat(password, passwordRepeat)
+        validate.access(valueAccess)
                     
-        // Crear nuevo usuario
-        await createNewUser(username, password, valueAccess, token)
-        
+        // Crear el objeto si las validaciones son exitosas
+        const newDataUser = {
+            username: username,
+            password: password,
+            access: valueAccess
+        }
+        // Enviar datos al servidor        
+        await createNewUser(newDataUser, token)        
         // Mostrar mensaje de éxito
         setMessage('✍️ Registro completado! 🎉')
-        setLevel('success') // 'success' aplica el estilo verde
-        
+        setLevel('success')
         // redireccionamos
         setTimeout(() => {
             navigate('/Admin/users')

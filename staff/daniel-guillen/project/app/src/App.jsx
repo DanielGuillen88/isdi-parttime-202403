@@ -3,7 +3,7 @@ import { Route, Routes, Navigate, BrowserRouter } from 'react-router-dom'
 import './index.css'
 // Components
 import Header from './components/Header'
-import { ContextProvider } from './useContext.jsx'
+import ContextProvider from './ContextProvider.jsx'
 // Logic
 import isUserLoggedIn from './logic/users/isUserLoggedIn'
 // Users Routes

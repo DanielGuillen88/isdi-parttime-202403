@@ -1,6 +1,8 @@
+import { SystemError } from "../../../../com/errors"
+
 const createWaste = async (dataWaste, token) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}stored/createWaste`, {
+      const apiResponse = await fetch(`${import.meta.env.VITE_API_URL}stored/createWaste`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -9,16 +11,17 @@ const createWaste = async (dataWaste, token) => {
         body: JSON.stringify(dataWaste),
       })
   
-      const result = await response.json()
+      const result = await apiResponse.json()
   
-      if (!response.ok) {
-        throw new Error(result.message || 'Error al registrar el residuo')
-      }
-  
-      return result
-    } catch (error) {
-      throw new Error('Error al registrar el residuo: ' + error.message)
+    // Primero si la respuesta no fue exitosa con servidor
+    if (!apiResponse.ok) {
+      throw new SystemError(result.message || 'Error al crear residuo')
     }
+    return result
+  } catch (err) {
+    // Lanzar el error completo y no solo el mensaje
+    throw new SystemError(err.message || 'Error inesperado en el servidor')
   }
+}
   
   export default createWaste

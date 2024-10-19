@@ -1,25 +1,27 @@
+import { SystemError } from "../../../../com/errors"
+
 const fetchReferencesLoad = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}departures/getAllReference`, {
+      const apiResponse = await fetch(`${import.meta.env.VITE_API_URL}departures/getAllReference`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
       })
   
-      if (!response.ok) {
-        throw new Error('Error al obtener las referencias')
+      if (!apiResponse.ok) {
+        throw new SystemError(result.message || 'Error al obtener las referencias')
       }
   
-      const result = await response.json()
+      const result = await apiResponse.json()
   
-      // Formatear los datos para select reference
-      return result.map((reference) => ({
-        value: reference, // valor que se enviará a la API
+      return result.map((reference) => ({ // Formatear los datos para select reference
+        value: reference, // valor que se enviará
         label: `${reference}`, // texto que se muestra en el select
       }))
     } catch (error) {
-      console.error('Error al obtener las referencias:', error)
+      console.error('No hay referencias')
+      // throw new SystemError(error.message || 'Error al obtener lista de referencias')
       return [] // devolvemos un array vacío en caso de error
     }
   }

@@ -7,7 +7,7 @@ import Title from '../../../components/core/Title'
 import FormWithFeedback from '../../../components/core/FormWithFeedback'
 import AccessControl from '../../../components/users/AccessControl'
 // Handlers
-import { handleRegisterSubmit, handleAccessChange } from '../../../handlers/registerNewUserHandllers.js'
+import { handleRegisterSubmit, handleAccessChange } from '../../../handlers/users/registerNewUserHandllers.js'
 
 const RegisterUser = () => {
     const navigate = useNavigate()

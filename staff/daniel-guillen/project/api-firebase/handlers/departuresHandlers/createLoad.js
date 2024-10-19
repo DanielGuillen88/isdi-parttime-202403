@@ -1,24 +1,33 @@
 import { db } from '../../firebase.js'
-import validateLoadData from '../../../com/validate/validateLoadData.js'
+import validate from '../../../com/validate/validateDepartures.js'
+import { ContentError } from 'com/errors.js'
 
-const createLoad = async (req, res) => { // Handler para crear un residuo cargado
+const createLoad = async (req, res, next) => {
   try {
     const { code, container, description, reference, weight, week, year } = req.body
 
-    const { isValid, errors } = validateLoadData({ code, container, description, reference, weight, week, year })
-
-    if (!isValid) {
-      console.log('Errores de validación:', errors)
-      return res.status(400).json({ message: errors.join(', ') })
+    // Validar los datos del residuo
+    try {
+      validate.code(code)
+      validate.container(container)
+      validate.description(description)
+      validate.reference(reference)
+      validate.weight(weight)
+      validate.week(week)
+      validate.year(year)
+    } catch (validationError) {
+      return next(new ContentError(validationError.message))
     }
 
-    const newLoad = { code, container, description, reference, weight, week, year } // Estructura del nuevo residuo
+    // Crear el objeto de carga
+    const newLoad = { code, container, description, reference, weight, week, year }
 
-    const LoadRef = await db.collection('departures').add(newLoad) // Agregar el nuevo residuo a la colección 'departures'
+    // Guardar en la base de datos (Firebase)
+    const LoadRef = await db.collection('departures').add(newLoad)
 
     console.log(`Carga registrada: ${code}-${description}-${reference}`)
-
-    res.status(201).json({    // Respuesta exitosa
+    // Respuesta exitosa
+    res.status(201).json({
       message: 'Nueva carga registrada',
       LoadId: LoadRef.id,
       code: newLoad.code,
@@ -26,8 +35,7 @@ const createLoad = async (req, res) => { // Handler para crear un residuo cargad
       reference: newLoad.reference,
     })
   } catch (error) {
-    console.error('Error al registrar residuo', error)
-    res.status(500).json({ message: 'Error al registrar residuo' })
+    next(error)
   }
 }
 

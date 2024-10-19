@@ -1,37 +1,30 @@
+import { SystemError } from "../../../../com/errors"
+
 const fetchLoadWaste = async (week, year, reference, token, setData, setLoading, setError) => {
   try {
-    setLoading(true)
-    setError(null)
+      setLoading(true)
 
-    const response = await fetch(`${import.meta.env.VITE_API_URL}departures/getAllLoads/${week}/${year}/${reference}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-    })
+      const apiResponse = await fetch(`${import.meta.env.VITE_API_URL}departures/getAllLoads/${week}/${year}/${reference}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      })
 
-    if (!response.ok) {
-      if (response.status === 404) {
-        setData([])// empezamos con array vacia, porque es una referencia nueva
-        return
+      const result = await apiResponse.json()
+
+      if (!apiResponse.ok) { // Primero si la respuesta no fue exitosa con servidor
+        throw new SystemError(result.message || 'Error al obtener las cargas almacenadas')
       }
-      throw new Error('Error al obtener las cargas almacenadas')
-    }
 
-    const result = await response.json()
-    
-    if (result.length === 0) {
-      setData([])
-    } else {
-      setData(result)  // renderizamos los datos si se encontraron
-    }
-
-  } catch (error) {
-    setError('Hubo un problema al conectar con el servidor')
-  } finally {
+    setData(result) // datos si la solicitud fue exitosa
+    } catch (err) {
+    // Lanzar el error completo y no solo el mensaje
+    setError(err.message || 'Error inesperado al obtener las cargas almacenadas')
+    } finally {
     setLoading(false)
-  }
+    }
 }
 
 export default fetchLoadWaste

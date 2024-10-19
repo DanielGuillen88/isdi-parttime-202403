@@ -11,8 +11,8 @@ import VehicleBig from '../../../components/img/VehicleBig.jpg'
 import fetchInspectionsById from '../../../logic/vehicles/getInspectionsById'
 import getMonthName from '../../../utils/getMonthName.js'
 // Handlers
-import { useCustomContext } from '../../../useContext.jsx'
-import handleDeleteInspection from '../../../handlers/deleteInspectionHandle.js'
+import { useCustomContext } from '../../../useContext.js'
+import handleDeleteInspection from '../../../handlers/vehicles/deleteInspectionHandle.js'
 
 const Historical = () => {
   const token = sessionStorage.getItem('token') // obtener el token de sessionStorage

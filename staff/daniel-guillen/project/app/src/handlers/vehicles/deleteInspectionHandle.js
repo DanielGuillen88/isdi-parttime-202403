@@ -1,5 +1,5 @@
-import deleteInspectionById from '../logic/vehicles/deleteInspection'
-import fetchInspectionsById from '../logic/vehicles/getInspectionsById'
+import deleteInspectionById from '../../logic/vehicles/deleteInspection'
+import fetchInspectionsById from '../../logic/vehicles/getInspectionsById'
 
 // Función para eliminar inspecciones por ID
 const handleDeleteInspection = async (id, token, vehicleId, setData, setLoading, setError, alert) => {
@@ -13,7 +13,7 @@ const handleDeleteInspection = async (id, token, vehicleId, setData, setLoading,
   } catch (error) {
     // console.error('Error eliminando inspección:', error)
     setError(error.message)
-    alert('Error eliminando inspección: ' + error.message)
+    alert('Error eliminando inspección: ' + error)
   } finally {
     setLoading(false) // Finalizar la carga
   }

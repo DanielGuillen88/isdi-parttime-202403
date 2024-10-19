@@ -1,14 +1,24 @@
 import bcryptjs from 'bcryptjs'
 import { db } from '../../firebase.js'
-import { validateUserRegistration } from 'com/validate/validateCreateUser.js'
+import validate from 'com/validate/validateUsers.js'
+import { ContentError } from 'com/errors.js'
 
-const createUser = async (req, res) => { // Handler para crear un usuario
+const createUser = async (req, res, next) => { // Handler para crear un usuario
     try {
-        const { username, access, password } = req.body
+        const { username, access, password} = req.body
 
-        validateUserRegistration(username, password, null, access) // validar inputs
+        // Validar los datos de usuario
+        try{
+            validate.username(username)
+            validate.password(password)
+            validate.access(access)
 
-        const userQuery = await db.collection('users').where('username', '==', username).get() // evitar duplicados
+        } catch (validationError) {
+            return next(new ContentError(validationError.message))
+          }
+
+        // evitar duplicados
+        const userQuery = await db.collection('users').where('username', '==', username).get() 
         if (!userQuery.empty) {
             console.log('Nombre de usuario ya existe')
             return res.status(409).json({ message: 'Nombre de usuario ya existe' })
@@ -17,25 +27,25 @@ const createUser = async (req, res) => { // Handler para crear un usuario
         const saltRounds = 10 // Hash en la contraseña
         const hashedPassword = await bcryptjs.hash(password, saltRounds)
 
-        const newUser = { // Crear nuevo usuario
+        // Crear el objeto de usuario
+        const newUser = {
             username,
             access,
             password: hashedPassword,
         }
-
-        const userRef = await db.collection('users').add(newUser) // Agregar el nuevo usuario a la colección 'users'
+        // Guardar en la base de datos (Firebase)
+        const userRef = await db.collection('users').add(newUser)
 
         console.log(`Usuario registrado: ${username} con acceso en ${access}`)
-
+        // Respuesta exitosa
         res.status(201).json({
             message: 'Nuevo usuario registrado',
             username: newUser.username,
             access: newUser.access,
         })
     } catch (error) {
-        console.error('Error al registrar nuevo usuario', error)
-        res.status(500).json({ message: 'Error al registrar nuevo usuario' })
+        next(error)
     }
-}
+    }
 
 export default createUser
