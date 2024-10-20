@@ -9,7 +9,7 @@ import createWaste from '../handlers/storedHandlers/createWaste.js'
 const storedRoutes = Router()
 
 // Ruta para obtener todos los residuos del mes
-storedRoutes.get('/getAllWasteStored', getAllWasteStored)
+storedRoutes.get('/getWasteStored/:month/:year', getAllWasteStored)
 
 // Ruta para buscar residuo por codigo
 storedRoutes.get('/getWasteStored/:month/:year/:code', getWasteStoredByCode)

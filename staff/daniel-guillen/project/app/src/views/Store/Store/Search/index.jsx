@@ -31,7 +31,7 @@ const Search = () => {
     if (selectedWaste) {
       setLoading(true)
       setTimeout(() => {
-        fetchStoredWaste(selectedWaste, token, setData, setLoading, setError, month, year)
+        fetchStoredWaste(selectedWaste, month, year, token, setData, setLoading, setError)
       }, 1500)
     }
   }, [selectedWaste, token, month, year])

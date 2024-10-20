@@ -1,10 +1,10 @@
 import { SystemError } from "../../../../com/errors"
 
-const fetchStoredWaste = async (token, setData, setLoading, setError) => {
+const fetchStoredWaste = async (month, year, token, setData, setLoading, setError) => {
   try {
     setLoading(true)
 
-    const apiResponse = await fetch(`${import.meta.env.VITE_API_URL}stored/getAllWasteStored`, {
+    const apiResponse = await fetch(`${import.meta.env.VITE_API_URL}stored/getWasteStored/${month}/${year}/`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

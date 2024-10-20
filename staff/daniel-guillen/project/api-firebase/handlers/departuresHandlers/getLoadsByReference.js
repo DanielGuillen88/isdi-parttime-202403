@@ -1,13 +1,18 @@
 import { db } from '../../firebase.js'
+import validate from 'com/validate/validateDepartures.js'
+import { ContentError, SystemError } from 'com/errors.js'
 
 // Handler para obtener la carga filtrada por referencia
 const getLoadByReference = async (req, res) => {
   try {
     const { reference } = req.params
 
-    if (!reference || typeof reference !== 'string') {
-      return res.status(400).json({ message: 'El campo "reference" es requerido' })
-    }
+      // Validar los datos del residuo
+      try {
+        validate.reference(reference)
+      } catch (validationError) {
+        return next(new ContentError(validationError.message))
+      }
 
     // Consultar documentos en 'departures' con la referencia específica
     const querySnapshot = await db.collection('departures')
@@ -15,7 +20,9 @@ const getLoadByReference = async (req, res) => {
       .get()
 
     if (querySnapshot.empty) {
-      return res.status(404).json({ message: `No se encontraron documentos con la referencia: ${reference}` })
+      // return next(new NotFoundError(`No se encontraron documentos con la semana: ${week}, año ${year} y referencia ${reference}.`))
+      console.log(`No se encontraron documentos con la semana: ${week}, año ${year} y referencia ${reference}.`)
+      return res.status(200).json([])
     }
 
     // Mapear los documentos obtenidos
@@ -25,10 +32,10 @@ const getLoadByReference = async (req, res) => {
     }))
 
     console.log(`Documentos con referencia ${reference}:`, storedLoads)
+    // Respuesta exitosa
     res.status(200).json(storedLoads)
   } catch (error) {
-    console.error('Error al obtener la carga con referencia específica', error)
-    res.status(500).json({ message: 'Error al obtener la carga con referencia específica' })
+    next(new SystemError('Error al obtener los residuos solicitados'))
   }
 }
 

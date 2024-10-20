@@ -1,31 +1,32 @@
 import { db } from '../../firebase.js'
+import { NotFoundError, SystemError } from 'com/errors.js'
 
 // Handler para eliminar un Residuo por ID
-const deleteWaste = async (req, res) => {
+const deleteWaste = async (req, res, next) => {
     const wasteId = req.params.id
   
     try {
       const wasteRef = db.collection('storedWaste').doc(wasteId)
       const wasteDoc = await wasteRef.get()
   
-       // Si no existe
-      if (!wasteDoc.exists) {
-        console.error('Residuo no encontrado')
-        return res.status(404).send('Residuo no encontrado')
+      if (!wasteDoc.exists) { // Si no existe
+        throw new NotFoundError('Residuo no encontrada')
       }
   
       // Extraer nombre de residuo para incluirlo en el mensaje
-      const { description } = wasteDoc.data() 
+      const { description, code } = wasteDoc.data() 
   
-      await wasteRef.delete()
+      await wasteRef.delete() // eliminar residuo
   
-      // Mensaje
-      console.log(`Residuo ${description} eliminado`)
-      res.status(200).send(`Residuo ${description} eliminado`)
+      console.log(`Residuo ${code}-${description} eliminado`)
+      // Respuesta exitosa
+      res.status(200).send(`Residuo ${code}-${description} eliminado`)
     } catch (error) {
-      console.error('Error al eliminar residuo', error)
-      res.status(500).send('Error al eliminar residuo')
-    }
+      if (!(error instanceof NotFoundError)) {
+          error = new SystemError('Error al eliminar residuo')
+      }
+      next(error)
   }
+}
 
   export default deleteWaste

@@ -1,11 +1,6 @@
 import { SystemError } from "../../../../com/errors"
 
-// obtener el mes y año actual
-  const today = new Date()
-  const month = String(today.getMonth() + 1).padStart(2, '0')
-  const year = String(today.getFullYear())
-
-const fetchStoredWaste = async (selectedWaste, token, setData, setLoading, setError ) => {
+const fetchStoredWaste = async (selectedWaste, month, year, token, setData, setLoading, setError ) => {
     try {
     setLoading(true)
 

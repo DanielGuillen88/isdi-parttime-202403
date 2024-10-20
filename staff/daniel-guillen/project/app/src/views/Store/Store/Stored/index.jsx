@@ -27,9 +27,13 @@ const Stored = () => {
   const [optionsContainer, setOptionsContainer] = useState('')
   const [statusOptions, setStatusOptions] = useState('CORRECTO')
 
+  const today = new Date() // Obtener mes y año actuales
+  const month = String(today.getMonth() + 1).padStart(2, '0')
+  const year = String(today.getFullYear())
+
   useEffect(() => {   // obtener la lista de residuos del servidor
-    fetchStoredWaste(token, setData, setLoading, setError)
-  }, [token])
+    fetchStoredWaste(month, year, token, setData, setLoading, setError)
+  }, [token, month, year])
 
   const resetForm = () => {   // restablecer los valores por defecto
     setWeight('') // resetear peso
@@ -44,10 +48,6 @@ const Stored = () => {
       onCancel: () => alert('🗑️ Eliminación cancelada ❌'),
     })
   }
-
-  const today = new Date() // Obtener mes y año actuales
-  const month = String(today.getMonth() + 1).padStart(2, '0')
-  const year = String(today.getFullYear())
 
   return (
     <div className='Stored'>

@@ -1,36 +1,42 @@
 import { db } from '../../firebase.js'
+import validate from 'com/validate/validateStored.js'
+import { ContentError, SystemError } from 'com/errors.js'
 
 // Handler para obtener los residuos almacenados actualmente
-const getAllWasteStored = async (req, res) => {
+const getAllWasteStored = async (req, res, next) => {
   try {
+    const { month, year } = req.params
+ 
+    // Validar los datos del residuo
+    try {
+      validate.month(month)
+      validate.year(year)
+    } catch (validationError) {
+      return next(new ContentError(validationError.message))
+    }
 
-    const today = new Date()
-    const month = String(today.getMonth() + 1).padStart(2, '0')
-    const year = String(today.getFullYear())
-
-    // consultamos residuos en 'storedWaste' del mes, año actual
+    // consultamos documentos en 'storedWaste' del mes y año
     const querySnapshot = await db.collection('storedWaste')
       .where('month', '==', month)
       .where('year', '==', year)
       .get()
 
     if (querySnapshot.empty) {
-      console.log(`No se encontraron documentos con el mes: ${month}, año ${year}.`)
-      // return res.status(200).json({ message: `No se encontraron documentos con el mes: ${month}, año ${year}.` })
+      // return next(new NotFoundError(`No se encontraron documentos con el mes: ${month}, año ${year} y referencia ${code}.`))
+      console.log(`No se encontraron documentos con el mes: ${month} y año ${year}.`)
       return res.status(200).json([])
     }
-
     // Mapear los documentos obtenidos
-    const storedLoads = querySnapshot.docs.map(doc => ({
+    const wasteStoredList = querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data(),
     }))
 
-    console.log(`Documentos con el mes ${month} y año ${year}:`, storedLoads)
-    return res.status(200).json(storedLoads)
+    console.log(`Documentos con el mes ${month} y año ${year}:`, wasteStoredList)
+    // Respuesta exitosa
+    return res.status(200).json(wasteStoredList)
   } catch (error) {
-    console.error('Error al obtener los residuos solicitados:', error)
-    return res.status(500).json({ message: 'Error al obtener los residuos solicitados' })
+    next(new SystemError('Error al obtener los residuos solicitados'))
   }
 }
 

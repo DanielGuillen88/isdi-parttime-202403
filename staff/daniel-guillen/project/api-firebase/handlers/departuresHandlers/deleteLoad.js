@@ -1,32 +1,32 @@
 import { db } from '../../firebase.js'
+import { NotFoundError, SystemError } from 'com/errors.js'
 
 // Handler para eliminar un Residuo por ID
-const deleteLoad = async (req, res) => {
+const deleteLoad = async (req, res, next) => {
     const wasteId = req.params.id
   
     try {
       const loadRef = db.collection('departures').doc(wasteId)
       const loadDoc = await loadRef.get()
   
-       // Si no existe
-      if (!loadDoc.exists) {
-        console.error('Carga no encontrado')
-        return res.status(404).send('Carga no encontrado')
+      if (!loadDoc.exists) { // Si no existe
+        throw new NotFoundError('Carga no encontrada')
       }
   
       // Extraer nombre de carga para incluirlo en el mensaje
-      const { description } = loadDoc.data()
-      const { reference } = loadDoc.data() 
+      const { description, reference } = loadDoc.data()
   
-      await loadRef.delete()
+      await loadRef.delete() // eliminar carga
   
-      // Mensaje
       console.log(`Carga ${description}-${reference} eliminada`)
+      // Respuesta exitosa
       res.status(200).send(`Carga ${description}-${reference} eliminada`)
     } catch (error) {
-      console.error('Error al eliminar carga', error)
-      res.status(500).send('Error al eliminar carga')
-    }
+      if (!(error instanceof NotFoundError)) {
+          error = new SystemError('Error al eliminar carga')
+      }
+      next(error)
   }
+}
 
   export default deleteLoad

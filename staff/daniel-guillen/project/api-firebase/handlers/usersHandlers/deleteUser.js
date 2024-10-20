@@ -1,4 +1,5 @@
 import { db } from '../../firebase.js'
+import { NotFoundError, SystemError } from 'com/errors.js'
 
 // Handler para eliminar un usuario por ID
 const deleteUser = async (req, res) => {
@@ -8,24 +9,24 @@ const deleteUser = async (req, res) => {
       const userRef = db.collection('users').doc(userId)
       const userDoc = await userRef.get()
   
-       // Si no existe
-      if (!userDoc.exists) {
-        console.error('Usuario no encontrado')
-        return res.status(404).send('Usuario no encontrado')
+      if (!userDoc.exists) { // Si no existe
+        throw new NotFoundError('Usuario no encontrado')
       }
   
-      // Extraer username para incluirlo en el mensaje
-      const { username } = userDoc.data() 
+      // Extraer datos de usuario para incluirlo en el mensaje
+      const { username, access } = userDoc.data() 
   
-      await userRef.delete()
+      await userRef.delete() // eliminar usuario
   
-      // Mensaje
-      console.log(`Usuario ${username} eliminado`)
-      res.status(200).send(`Usuario ${username} eliminado`)
+      console.log(`Usuario ${username}-${access} eliminado`)
+      // Respuesta exitosa
+      res.status(200).send(`Usuario ${username}-${access} eliminado`)
     } catch (error) {
-      console.error('Error al eliminar usuario', error)
-      res.status(500).send('Error al eliminar usuario')
-    }
+      if (!(error instanceof NotFoundError)) {
+          error = new SystemError('Error al eliminar usuario')
+      }
+      next(error)
   }
+}
 
   export default deleteUser
