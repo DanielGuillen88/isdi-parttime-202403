@@ -1,7 +1,9 @@
 import { db } from '../../firebase.js'
+// validation errors
 import validate from '../../../com/validate/validateStored.js'
+import { ContentError } from 'com/errors.js'
 
-const createWaste = async (req, res) => { // Handler para crear un residuo almacenado
+const createWaste = async (req, res, next) => { // Handler para crear un residuo almacenado
   try {
     const { code, container, description, status, weight, month, year } = req.body
 
@@ -14,11 +16,12 @@ const createWaste = async (req, res) => { // Handler para crear un residuo almac
       validate.month(month)
       validate.year(year)
     } catch (validationError) {
-      console.log('Errores de validación:', validationError.message)
-      return res.status(400).json({ message: validationError.message })
+      return next(new ContentError(validationError.message))
     }
-    // Si las validaciones pasan, crear el objeto
+
+    // Crear el objeto de residuo
     const newWaste = { code, container, description, status, weight, month, year }
+
     // Guardar en la base de datos (Firebase)
     const wasteRef = await db.collection('storedWaste').add(newWaste)
 
@@ -32,8 +35,7 @@ const createWaste = async (req, res) => { // Handler para crear un residuo almac
       container: newWaste.container
     })
   } catch (error) {
-    console.error('Error al registrar residuo', error)
-    res.status(500).json({ message: 'Error al registrar residuo' })
+    next(error)
   }
 }
 

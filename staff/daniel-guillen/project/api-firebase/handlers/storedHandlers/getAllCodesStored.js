@@ -1,41 +1,50 @@
 import { db } from '../../firebase.js'
+// validation errors
+import validate from 'com/validate/validateStored.js'
+import { SystemError, ContentError } from 'com/errors.js'
 
-const getAllCodesStored = async (req, res) => {
+// Handler para obtener lista de códigos de residuos almacenados durante mes y año actual
+const getAllCodesStored = async (req, res, next) => {
   try {
-    const storedLoadsCollection = db.collection('storedLoads') // accedemos a 'storedLoads'
-    
-    const querySnapshot = await storedLoadsCollection.get() // sacamos todos los documentos de 'storedLoads'
+    const { month, year } = req.params
 
-    const today = new Date()
-    const month = String(today.getMonth() + 1).padStart(2, '0')
-    const year = String(today.getFullYear())
+    // Validar los datos
+    try {
+      validate.month(month)
+      validate.year(year)
+    } catch (validationError) {
+      return next(new ContentError(validationError.message))
+    }
 
-    // consultamos documentos en 'storedWaste' del mes, año actual
+    // Consultamos documentos en 'storedWaste' del mes y año actual
     const filterQuerySnapshot = await db.collection('storedWaste')
       .where('month', '==', month)
       .where('year', '==', year)
       .get()
 
-    // buscamos códigos y descripciones de los documentos y los guardamos en un array
+    if (filterQuerySnapshot.empty) {
+      console.log('No se encontraron documentos para el mes y año proporcionados.')
+      return res.status(200).json([]) // Devuelve array vacío si no hay resultados
+    }
+   
+    // Buscamos códigos y descripciones de los documentos y los guardamos en un array
     const codeDescriptions = filterQuerySnapshot.docs.map(doc => ({
       code: doc.data().code,
       description: doc.data().description
     }))
 
-    // Traemos un por cada codigo diferente
+    // Traemos uno por cada código diferente
     const uniqueCodeDescriptions = Array.from(new Set(codeDescriptions.map(item => item.code)))
       .map(code => {
         return codeDescriptions.find(item => item.code === code)
       })
 
-    // Devuelve la lista de códigos junto con sus descripciones
     console.log('Lista de códigos y descripciones:', uniqueCodeDescriptions)
+    // Respuesta exitosa
     res.status(200).json(uniqueCodeDescriptions)
   } catch (error) {
-    console.error('Error al obtener lista de códigos y descripciones:', error)
-    res.status(500).json({ error: 'Error al obtener lista de códigos y descripciones' })
+    next(new SystemError('Error al obtener lista de códigos almacenados'))
   }
 }
 
 export default getAllCodesStored
-

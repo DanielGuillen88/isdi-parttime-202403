@@ -15,7 +15,7 @@ storedRoutes.get('/getWasteStored/:month/:year', getAllWasteStored)
 storedRoutes.get('/getWasteStored/:month/:year/:code', getWasteStoredByCode)
 
 // Ruta para buscar lista de codigos de residuos guardados
-storedRoutes.get('/getAllCodesStored/', getAllCodesStored)
+storedRoutes.get('/getAllCodesStored/:month/:year', getAllCodesStored)
 
 // Ruta para crear un nuevo residuo
 storedRoutes.post('/createWaste', createWaste)
@@ -24,4 +24,3 @@ storedRoutes.post('/createWaste', createWaste)
 storedRoutes.delete('/deleteWaste/:id', deleteWaste)
 
 export default storedRoutes
-

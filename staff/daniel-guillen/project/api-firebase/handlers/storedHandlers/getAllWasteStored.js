@@ -1,4 +1,5 @@
 import { db } from '../../firebase.js'
+// validation errors
 import validate from 'com/validate/validateStored.js'
 import { ContentError, SystemError } from 'com/errors.js'
 
@@ -22,7 +23,6 @@ const getAllWasteStored = async (req, res, next) => {
       .get()
 
     if (querySnapshot.empty) {
-      // return next(new NotFoundError(`No se encontraron documentos con el mes: ${month}, año ${year} y referencia ${code}.`))
       console.log(`No se encontraron documentos con el mes: ${month} y año ${year}.`)
       return res.status(200).json([])
     }

@@ -2,11 +2,12 @@ import 'dotenv/config'
 import { db } from '../../firebase.js'
 import bcryptjs from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-// validation
+// validation errors
 import validate from 'com/validate/validateUsers.js'
+import { CredentialsError, NotFoundError, SystemError } from 'com/errors.js'
 
 // Handler para la autenticacion de usuario
-const loginUser = async (req, res) => {
+const loginUser = async (req, res, next) => {
     const { username, password } = req.body
     
       // Validar los datos de usuario
@@ -18,8 +19,7 @@ const loginUser = async (req, res) => {
 
         // verificar si el usuario existe
         if (userQuery.empty) {
-            console.error('Nombre de usuario no existe')
-            return res.status(404).json({ message: 'Nombre de usuario no existe' })
+            return next(new NotFoundError('Nombre de usuario no existe'))
         }
 
         const userDoc = userQuery.docs[0]
@@ -28,8 +28,7 @@ const loginUser = async (req, res) => {
         // verificar la contraseña
         const isValidPassword = bcryptjs.compareSync(password, user.password)
         if (!isValidPassword) {
-            console.error('Contraseña no válida')
-            return res.status(401).json({ message: 'Contraseña no válida' })
+            return next(new CredentialsError('Contraseña no válida'))
         }
 
         // generamos token
@@ -40,10 +39,13 @@ const loginUser = async (req, res) => {
         )
 
         console.log(`Usuario autenticado: Bienvenido ${username}!`)
+        // Respuesta exitosa
         return res.status(200).json({ message: 'Inicio de sesión exitoso', token })
     } catch (error) {
-        console.error('Error en el inicio de sesión', error)
-        return res.status(500).json({ message: `Error en el inicio de sesión: ${error.message}` })
+        if (error instanceof CredentialsError || error instanceof NotFoundError) {
+            return next(error)
+        }
+        return next(new SystemError(`Error en el inicio de sesión: ${error.message}`))
     }
 }
 

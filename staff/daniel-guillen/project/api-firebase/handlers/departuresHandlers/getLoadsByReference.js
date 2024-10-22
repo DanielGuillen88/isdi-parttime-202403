@@ -1,4 +1,5 @@
 import { db } from '../../firebase.js'
+// validation errors
 import validate from 'com/validate/validateDepartures.js'
 import { ContentError, SystemError } from 'com/errors.js'
 

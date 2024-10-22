@@ -1,4 +1,5 @@
 import { db } from '../../firebase.js'
+// errors
 import { NotFoundError, SystemError } from 'com/errors.js'
 
 // Handler para eliminar un usuario por ID

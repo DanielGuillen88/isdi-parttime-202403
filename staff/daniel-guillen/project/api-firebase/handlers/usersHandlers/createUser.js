@@ -1,5 +1,6 @@
 import bcryptjs from 'bcryptjs'
 import { db } from '../../firebase.js'
+// validation errors
 import validate from 'com/validate/validateUsers.js'
 import { ContentError } from 'com/errors.js'
 

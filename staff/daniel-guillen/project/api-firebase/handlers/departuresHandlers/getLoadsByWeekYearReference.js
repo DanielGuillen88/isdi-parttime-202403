@@ -1,4 +1,5 @@
 import { db } from '../../firebase.js'
+// validation errors
 import validate from 'com/validate/validateDepartures.js'
 import { ContentError, SystemError } from 'com/errors.js'
 
@@ -24,7 +25,6 @@ const getLoadsByWYR = async (req, res, next) => {
       .get()
 
     if (querySnapshot.empty) {
-      // return next(new NotFoundError(`No se encontraron documentos con la semana: ${week}, año ${year} y referencia ${reference}.`))
       console.log(`No se encontraron documentos con la semana: ${week}, año ${year} y referencia ${reference}.`)
       return res.status(200).json([])
     }

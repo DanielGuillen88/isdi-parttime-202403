@@ -1,23 +1,35 @@
-import { db } from '../../firebase.js';
+import { db } from '../../firebase.js'
+// errors
+import { SystemError } from 'com/errors.js'
 
-const getAllReferenceLoads = async (req, res) => {
+// Handler para obtener lista de referencias utilizadas en las cargas
+const getAllReferenceLoads = async (req, res, next) => {
   try {
-    const departuresCollection = db.collection('departures'); // Accede a la colección 'departures'
-    const querySnapshot = await departuresCollection.get(); // Obtiene todos los documentos de 'departures'
+    const departuresCollection = db.collection('departures')
+    const querySnapshot = await departuresCollection.get()
 
-    // Extrae las referencias de los documentos y las guarda en un array
-    const references = querySnapshot.docs.map(doc => doc.data().reference);
+    if (querySnapshot.empty) {
+      console.log('No se encontraron documentos en la colección departures.')
+      return res.status(200).json([])
+    }
+
+    // Filtrar referencias
+    const references = querySnapshot.docs.map(doc => doc.data().reference).filter(Boolean)
+
+    if (references.length === 0) {
+      console.log('No se encontraron referencias en los documentos de la colección departures.')
+      return res.status(200).json([])
+    }
 
     // Filtra referencias únicas
-    const uniqueReferences = [...new Set(references)];
+    const uniqueReferences = [...new Set(references)]
 
-    // Devuelve las referencias únicas
     console.log('Lista de referencia:', uniqueReferences)
-    res.status(200).json(uniqueReferences);
+    // Respuesta exitosa
+    res.status(200).json(uniqueReferences)
   } catch (error) {
-    console.error('Error al obtener las referencias:', error);
-    res.status(500).json({ error: 'Error al obtener las referencias' });
+    next(new SystemError('Error al obtener las referencias'))
   }
-};
+}
 
-export default getAllReferenceLoads;
+export default getAllReferenceLoads
