@@ -14,7 +14,7 @@ import getMonthName from '../../../utils/getMonthName.js'
 import { useCustomContext } from '../../../useContext.js'
 import handleDeleteInspection from '../../../handlers/vehicles/deleteInspectionHandle.js'
 
-const Historical = () => {
+const VehicleHistory = () => {
   const token = sessionStorage.getItem('token') // obtener el token de sessionStorage
   const { vehicleId } = useParams() // props viene desde el registro
   const navigate = useNavigate()
@@ -80,7 +80,7 @@ const Historical = () => {
           <div className='VehicleHistorical'>
             <h2 className="VehicleId">Vehículo {vehicleId}:</h2>
             {vehicleImg && <img src={vehicleImg} alt={`Imagen de vehículo ${vehicleSize}`} />}
-            <Button className='HistoricalLink' onClick={() => navigate('/Vehicles')}>⬅️Volver a registro</Button>
+            <Button className='HistoricalLink' onClick={() => navigate('/vehicles/inspection')}>⬅️Volver a registro</Button>
           </div>
 
           {data.map((item) => (
@@ -110,4 +110,4 @@ const Historical = () => {
   )
 }
 
-export default Historical
+export default VehicleHistory

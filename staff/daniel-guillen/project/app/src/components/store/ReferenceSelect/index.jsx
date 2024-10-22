@@ -18,8 +18,11 @@ const ReferenceSelect = ({ selectedReference, handleReferenceChange }) => {
     loadReferences()
   }, [])
 
+  // Ordenar opciones
+  const options = data.sort((a, b) => a.value.localeCompare(b.value))
+
   // opción seleccionada a partir del valor de selectedReference
-  const selectedOption = data.find(option => option.value === selectedReference)
+  const selectedOption = options.find(option => option.value === selectedReference)
 
   return (
     <div className='ReferenceLoadDiv'>
@@ -27,7 +30,7 @@ const ReferenceSelect = ({ selectedReference, handleReferenceChange }) => {
         className='ReferenceSelected'
         id='ReferenceSelect'
         placeholder="REFERENCIA"
-        options={data} // opciones para el select
+        options={options} // opciones para el select
         value={selectedOption} // valor actualmente seleccionado
         onChange={(selected) => handleReferenceChange(selected ? selected.value : null)}
         isClearable

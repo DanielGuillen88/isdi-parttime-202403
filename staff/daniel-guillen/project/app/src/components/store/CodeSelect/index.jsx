@@ -5,17 +5,21 @@ import Select from 'react-select'
 // logic
 import fetchCodesWasteStored from '../../../logic/stored/getCodesWasteStored'
 
-const CodeSelect = ({ selectedWaste, handleCodeChange }) => {
+const CodeSelect = ({ selectedWaste, handleCodeChange, month, year, token }) => {
   
   const [data, setData] = useState([]) // almacenar las códigos
 
   useEffect(() => {
     const loadCodes = async () => {
-      const fetchedData = await fetchCodesWasteStored() // buscamos todos los codigos registrados en inventario
-      setData(fetchedData)
+      const fetchedData = await fetchCodesWasteStored(month, year, token) // buscamos todos los codigos registrados en inventario
+      const formattedData = fetchedData.map(item => ({
+        value: item.code, // El valor será solo el código
+        label: `${item.code} - ${item.description}` // El label mostrará código y descripción
+      }))
+      setData(formattedData)
     }
     loadCodes()
-  }, [])
+  }, [month, year, token])
 
   // Ordenar opciones
   const options = data.sort((a, b) => a.value.localeCompare(b.value))

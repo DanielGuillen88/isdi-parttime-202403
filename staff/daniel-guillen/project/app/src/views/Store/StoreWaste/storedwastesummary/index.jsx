@@ -6,17 +6,20 @@ import MenuStore from '../../../../components/store/MenuStore'
 // logic
 import fetchStoredWaste from '../../../../logic/stored/getWasteStored.js'
 
-const SummaryStore = () => {
+const StoredWasteSummary = () => {
   const token = sessionStorage.getItem('token') // obtener el token de sessionStorage
 
   const [data, setData] = useState([])  // almacenar la lista de residuos
   const [loading, setLoading] = useState(true) // mostrar el estado de carga
   const [error, setError] = useState(null) // manejar errores
 
+  const today = new Date() // Obtener mes y año actuales
+  const month = String(today.getMonth() + 1).padStart(2, '0')
+  const year = String(today.getFullYear())
   
   useEffect(() => {// obtener la lista de residuos del servidor
-    fetchStoredWaste(token, setData, setLoading, setError)
-  }, [token])
+    fetchStoredWaste(month, year, token, setData, setLoading, setError)
+  }, [month, year, token])
 
     if (loading) { // Cargando...
       return <p style={{ color: 'white', textAlign: 'center', marginTop: '1rem' }}>Cargando resumen de residuos en el almacén...</p>
@@ -36,11 +39,11 @@ const SummaryStore = () => {
     
     <h1 className='RouteTitle'>RESUMEN</h1>
 
-      <h2 className='Title'>Datos resumidos de Residuos:</h2>
+      <h2 className='Title'>Datos de residuos {month}/{year}:</h2>
 
       <GroupedWasteItem data={data} />
 
-      <h2 className='Title'>Residuos estancados:</h2>
+      <h2 className='Title'>Residuos estancados {month}/{year}:</h2>
 
       {stagnantList.length > 0 ? (
         stagnantList.map(item => {
@@ -65,4 +68,4 @@ const SummaryStore = () => {
   )
 }
 
-export default SummaryStore
+export default StoredWasteSummary

@@ -19,7 +19,7 @@ const MenuLoads = () => {
         <li>
           <Button 
             className='menuFooter-center' 
-            onClick={() => navigate('/Departures')}
+            onClick={() => navigate('/Departures/registerload')}
           >
             📦
           </Button>
@@ -27,7 +27,7 @@ const MenuLoads = () => {
         <li>
           <Button 
             className='menuFooter-end' 
-            onClick={() => navigate('/Departures/Search')}
+            onClick={() => navigate('/Departures/searchdepartures')}
           >
             🔎
           </Button>

@@ -1,5 +1,7 @@
-import validate from 'com/validate/validateDepartures'
+// logic
 import createLoad from '../../logic/departures/createLoad'
+// validations errors
+import validate from 'com/validate/validateDepartures'
 import { ValidationError, SystemError } from '../../../../com/errors'
 
 // monitoreamos reference
@@ -33,7 +35,7 @@ export const handleSubmit = async (e, selectedWaste, weight, optionsContainer, w
         validate.week(week)
         validate.year(year)
       // Crear el objeto si las validaciones son exitosas
-      const NewdataLoad = { 
+      const newDataLoad = { 
         code: selectedWaste.code,
         description: selectedWaste.description,
         weight: weight,
@@ -43,7 +45,7 @@ export const handleSubmit = async (e, selectedWaste, weight, optionsContainer, w
         year: year
       }
       // Enviar datos al servidor
-      await createLoad(NewdataLoad, token)     
+      await createLoad(newDataLoad, token)     
       // Mostrar mensaje de éxito
       alert(`📦 Carga ${selectedWaste.description} registrada en ${reference} 🎉`) 
       getLoadWaste() // para refrescar la lista de cargados

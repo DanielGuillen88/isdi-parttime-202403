@@ -1,5 +1,7 @@
-import validate from 'com/validate/validateStored'
+// logic
 import createWaste from '../../logic/stored/createWaste'
+// validations errors
+import validate from 'com/validate/validateStored'
 import { ValidationError, SystemError } from '../../../../com/errors'
 
 // Selección del residuo

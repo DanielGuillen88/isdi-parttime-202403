@@ -11,7 +11,7 @@ import { useCustomContext } from '../../../../useContext.js'
 // logic
 import fetchLoads from '../../../../logic/departures/getWasteLoadSearched'
 
-const Search = () => {
+const SearchDepartures = () => {
   const token = sessionStorage.getItem('token') // obtener el token de sessionStorage
   const { alert, confirm } = useCustomContext() // Usar alert y confirm personalizados
   
@@ -71,4 +71,4 @@ const Search = () => {
   )
 }
 
-export default Search
+export default SearchDepartures

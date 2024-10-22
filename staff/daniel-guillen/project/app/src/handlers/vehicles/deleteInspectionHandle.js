@@ -11,7 +11,6 @@ const handleDeleteInspection = async (id, token, vehicleId, setData, setLoading,
     const updatedInspections = await fetchInspectionsById(vehicleId, token)
     setData(updatedInspections) // Actualizamos la lista de inspecciones
   } catch (error) {
-    // console.error('Error eliminando inspección:', error)
     setError(error.message)
     alert('Error eliminando inspección: ' + error)
   } finally {

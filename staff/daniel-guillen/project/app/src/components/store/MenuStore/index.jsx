@@ -19,7 +19,7 @@ const MenuStore = () => {
         <li>
           <Button 
             className='menuFooter-center' 
-            onClick={() => navigate('/Store/Stored')}
+            onClick={() => navigate('/StoreWaste/storedwaste')}
           >
             📦
           </Button>
@@ -27,7 +27,7 @@ const MenuStore = () => {
         <li>
           <Button 
             className='menuFooter-center' 
-            onClick={() => navigate('/Store/Summary')}
+            onClick={() => navigate('/StoreWaste/storedwastesummary')}
           >
             📊
           </Button>
@@ -35,7 +35,7 @@ const MenuStore = () => {
         <li>
           <Button 
             className='menuFooter-end' 
-            onClick={() => navigate('/Store/Search')}
+            onClick={() => navigate('/StoreWaste/searchstoredwaste')}
           >
             🔎
           </Button>

@@ -4,16 +4,22 @@
   .Button {
     @apply cursor-pointer text-3xl text-center items-center;
   }
+  .MenuButton {
+    @apply bg-orange-500 text-xl my-2 mx-10 rounded-md;
+  }
+  .MenuButton:hover {
+    @apply bg-orange-300;
+  }
   .SubmitButton {
     @apply bg-green-700 my-2 mx-10 rounded-md;
   }
   .SubmitButton:hover {
-    @apply bg-green-500 my-2 mx-10 rounded-md;
+    @apply bg-green-500;
   }
   .return {
     @apply bg-green-700 text-white flex flex-col w-36 text-2xl text-center items-center ml-8 p-1 rounded-md;
   }
   .return:hover {
-    @apply bg-green-500 text-white flex flex-col w-36 text-2xl text-center items-center ml-8 p-1 rounded-md;
+    @apply bg-green-500;
   }
 }

@@ -1,11 +1,12 @@
 import { SystemError } from "../../../../com/errors"
 
-const fetchCodesWasteStored = async () => {
+const fetchCodesWasteStored = async (month, year, token) => {
     try {
-      const apiResponse = await fetch(`${import.meta.env.VITE_API_URL}stored/getAllCodesStored`, {
+      const apiResponse = await fetch(`${import.meta.env.VITE_API_URL}stored/getAllCodesStored/${month}/${year}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
       })
   
@@ -23,4 +24,3 @@ const fetchCodesWasteStored = async () => {
   }
   
   export default fetchCodesWasteStored
-  

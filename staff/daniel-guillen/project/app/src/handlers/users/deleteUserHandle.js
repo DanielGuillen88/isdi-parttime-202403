@@ -10,7 +10,6 @@ const handleDeleteUser = async (id, token, setData, setLoading, setError, alert)
       // refrescar la lista después de eliminar un usuario
       fetchAllUsers(token, setData, setLoading, setError)
     } catch (error) {
-      // console.error('Error al eliminar Usuario:', error)
       setError(error.message)
       alert('Error al eliminar Usuario:' + error)
     }

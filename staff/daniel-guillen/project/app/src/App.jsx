@@ -6,22 +6,24 @@ import Header from './components/Header'
 import ContextProvider from './ContextProvider.jsx'
 // Logic
 import isUserLoggedIn from './logic/users/isUserLoggedIn'
-// Users Routes
+// Main Routes
 import Login from './views/Login'
 import Home from './views/Home'
+// Admin Routes
 import Admin from './views/Admin'
-import Register from './views/Admin/Register'
-import Users from './views/Admin/Users'
-// StoreRutes
+import RegisterUser from './views/Admin/registeruser'
+import UsersList from './views/Admin/userslist'
+// Stored Routes
 import Store from './views/Store'
-import Stored from './views/Store/Store/Stored'
-import Summary from './views/Store/Store/Summary'
-import Search from './views/Store/Store/Search'
-import Departures from './views/Store/Departures/Loads'
-import SearchLoad from './views/Store/Departures/Search'
-// VehiclesRoutes
-import Vehicles from './views/Vehicles'
-import Historical from './views/Vehicles/Historical'
+import StoredWaste from './views/Store/StoreWaste/storedwaste'
+import StoredWasteSummary from './views/Store/StoreWaste/storedwastesummary'
+import SearchStoredWaste from './views/Store/StoreWaste/searchstoredwaste'
+// Departures Routes
+import RegisterLoad from './views/Store/Departures/registerload'
+import SearchDepartures from './views/Store/Departures/searchdepartures'
+// Vehicles Routes
+import VehicleInspection from './views/Vehicles/vehicleinspection'
+import VehicleHistory from './views/Vehicles/vehiclehistory'
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -45,19 +47,20 @@ function App() {
               <>
                 <Route path='/' element={<Home />} />
                 <Route path='/Admin' element={<Admin />} />
-                <Route path='/Admin/Register' element={<Register />} />
-                <Route path='/Admin/Users' element={<Users />} />
+
+                <Route path='/Admin/registeruser' element={<RegisterUser />} />
+                <Route path='/Admin/userslist' element={<UsersList />} />
 
                 <Route path='/Store' element={<Store />} />
-                <Route path='/Store/Stored' element={<Stored />} />
-                <Route path='/Store/Summary' element={<Summary />} />
-                <Route path='/Store/Search' element={<Search />} />
+                <Route path='/StoreWaste/storedwaste' element={<StoredWaste />} />
+                <Route path='/StoreWaste/storedwastesummary' element={<StoredWasteSummary />} />
+                <Route path='/StoreWaste/searchstoredwaste' element={<SearchStoredWaste />} />
 
-                <Route path='/Departures' element={<Departures />} />
-                <Route path='/Departures/Search' element={<SearchLoad />} />
+                <Route path='/Departures/registerload' element={<RegisterLoad />} />
+                <Route path='/Departures/searchdepartures' element={<SearchDepartures />} />
 
-                <Route path='/Vehicles' element={<Vehicles />} />
-                <Route path='/Vehicles/Historical/:vehicleId' element={<Historical />} />
+                <Route path='/vehicles/inspection' element={<VehicleInspection />} />
+                <Route path='/vehicles/historical/:vehicleId' element={<VehicleHistory />} />
               </>
             ) : (
               <Route path='/*' element={<Login setIsAuthenticated={setIsAuthenticated} />} />

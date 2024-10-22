@@ -10,7 +10,6 @@ const handleDeleteWaste = async (id, token, week, year, reference, setData, setL
       // refrescar la lista después de eliminar una carga
       fetchLoadWaste(week, year, reference, token, setData, setLoading, setError)
     } catch (error) {
-      // console.error('Error al eliminar carga:', error)
       setError(error.message)
       alert('Error al eliminar carga:' + error)
     }

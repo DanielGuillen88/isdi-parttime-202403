@@ -18,7 +18,7 @@ import { handleReferenceChange, handleWasteChange, handleWeightChange, handleOpt
 import handleDeleteWaste from '../../../../handlers/departures/deleteWasteLoadHandle.js'
 import { useCustomContext } from '../../../../useContext.js'
 
-const Departures = () => {
+const RegisterLoad = () => {
   const token = sessionStorage.getItem('token') // obtener el token de sessionStorage
   const { alert, confirm } = useCustomContext() // Usar alert y confirm personalizados
   const { week, year } = getWeekNumberYear() // traemos la semana del año
@@ -109,4 +109,4 @@ const Departures = () => {
   )
 }
 
-export default Departures
+export default RegisterLoad

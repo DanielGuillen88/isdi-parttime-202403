@@ -31,7 +31,6 @@ export const handleRegisterSubmit = async (event, valueAccess, setMessage, setLe
             navigate('/Admin/users')
         }, 2000)
     } catch (error) {
-        // console.error(error)
         setMessage(error.message) // Mostrar error en el feedback del formulario
         setLevel('error')
     }

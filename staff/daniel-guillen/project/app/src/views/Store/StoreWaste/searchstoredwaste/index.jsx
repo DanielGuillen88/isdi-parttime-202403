@@ -11,7 +11,7 @@ import fetchStoredWaste from '../../../../logic/stored/getWasteStoredByCode'
 import handleDeleteWaste from '../../../../handlers/stored/deleteWasteStoredSearchHandle.js'
 import { useCustomContext } from '../../../../useContext.js'
 
-const Search = () => {
+const SearchStoredWaste = () => {
   const token = sessionStorage.getItem('token') // obtener el token de sessionStorage
   const { alert, confirm } = useCustomContext() // Usar alert y confirm personalizados
   const [data, setData] = useState([])  // almacenar la lista de residuos
@@ -39,7 +39,7 @@ const Search = () => {
   const handleDelete = (id) => {  // manejamos el custom confirm para eliminar residuo
     confirm({
       message: '🗑️ ¿Deseas eliminar este Residuo? 📦',
-      onAccept: () => handleDeleteWaste(selectedWaste, id, token, setData, setLoading, setError, alert),
+      onAccept: () => handleDeleteWaste(selectedWaste, month, year, id, token, setData, setLoading, setError, alert),
       onCancel: () => alert('🗑️ Eliminación cancelada ❌'),
     })
   }
@@ -47,7 +47,7 @@ const Search = () => {
   return (
     <div className='SearchWasteDiv'>
       <h1 className='RouteTitle'>BUSCAR RESIDUO POR</h1>
-      <CodeSelect selectedWaste={selectedWaste} handleCodeChange={handleCodeChange} />
+      <CodeSelect selectedWaste={selectedWaste} handleCodeChange={handleCodeChange} month={month} year={year} token={token}/>
 
       {/* lista de residuos almacenados */}
       <div>
@@ -76,4 +76,4 @@ const Search = () => {
   )
 }
 
-export default Search
+export default SearchStoredWaste

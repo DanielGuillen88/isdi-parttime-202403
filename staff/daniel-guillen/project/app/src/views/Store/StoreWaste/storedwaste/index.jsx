@@ -15,7 +15,7 @@ import { handleWasteChange, handleWeightChange, handleOptionsContainer, handleSt
 import handleDeleteWaste from '../../../../handlers/stored/deleteWasteStoredHandle.js'
 import { useCustomContext } from '../../../../useContext.js'
 
-const Stored = () => {
+const StoredWaste = () => {
   const token = sessionStorage.getItem('token') // obtener el token de sessionStorage
   const { alert, confirm } = useCustomContext() // Usar alert y confirm personalizados
   const [data, setData] = useState([]) // almacenar la lista de residuos
@@ -44,7 +44,7 @@ const Stored = () => {
   const handleDelete = (id) => { // manejamos el custom confirm para eliminar residuo
     confirm({
       message: '🗑️ ¿Deseas eliminar este Residuo? 📦',
-      onAccept: () => handleDeleteWaste(id, token, setData, setLoading, setError, alert),
+      onAccept: () => handleDeleteWaste(id, month, year, token, setData, setLoading, setError, alert),
       onCancel: () => alert('🗑️ Eliminación cancelada ❌'),
     })
   }
@@ -57,7 +57,7 @@ const Stored = () => {
       <form
         className='StoreWasteForm' onSubmit={(e) =>
           handleSubmit(e, selectedWaste, weight, optionsContainer, statusOptions, month, year, token, alert, () => {
-            fetchStoredWaste(token, setData, setLoading, setError)
+            fetchStoredWaste(month, year, token, setData, setLoading, setError)
             resetForm() // restablecer los valores de acondicionamiento, peso y estado
           })
         }
@@ -97,7 +97,7 @@ const Stored = () => {
           <p style={{ color: 'white', textAlign: 'center', marginTop: '1rem' }}>No hay residuos almacenados este mes.</p>
         ) : (
           <div>
-            <h2 className='Title'>Residuos almacenados</h2>
+            <h2 className='Title'>Residuos almacenados {month}/{year}</h2>
 
                 <WasteList data={data} onClick={(itemId) => handleDelete(itemId)} />
 
@@ -110,4 +110,4 @@ const Stored = () => {
   )
 }
 
-export default Stored
+export default StoredWaste

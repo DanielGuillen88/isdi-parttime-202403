@@ -1,20 +1,20 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import './index.css'
+import '../index.css'
 // Components
-import Button from '../../components/core/Button'
-import VehiclesSelect from '../../components/vehicles/VehicleSelect'
-import InspectionFooter from '../../components/vehicles/InspectionFooter'
-import InspectionSections from '../../components/vehicles/InspectionSections'
+import Button from '../../../components/core/Button'
+import VehiclesSelect from '../../../components/vehicles/VehicleSelect'
+import InspectionFooter from '../../../components/vehicles/InspectionFooter'
+import InspectionSections from '../../../components/vehicles/InspectionSections'
 // Handlers
-import { handleVehicleChange, handleRadioChange, saveData } from '../../handlers/vehicles/registerVehicleInspectionHandlers'
-import { useCustomContext } from '../../useContext'
+import { handleVehicleChange, handleRadioChange, saveData } from '../../../handlers/vehicles/registerVehicleInspectionHandlers'
+import { useCustomContext } from '../../../useContext'
 // Data
-import small from './inspectionData/checkListSmall.json'
-import medium from './inspectionData/checkListMedium.json'
-import big from './inspectionData/checkListBig.json'
+import small from '../inspectiondata/checkListSmall.json'
+import medium from '../inspectiondata/checkListMedium.json'
+import big from '../inspectiondata/checkListBig.json'
 
-const Vehicles = () => {
+const VehicleInspection = () => {
   const navigate = useNavigate()
   const token = sessionStorage.getItem('token') // obtener el token de sessionStorage
   const { alert } = useCustomContext()
@@ -75,4 +75,4 @@ const Vehicles = () => {
   )
 }
 
-export default Vehicles
+export default VehicleInspection

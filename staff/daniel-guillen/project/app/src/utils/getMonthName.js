@@ -1,3 +1,4 @@
+// convertir mes a texto
 const getMonthName = (monthNumber) => {
     const months = [
       "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
