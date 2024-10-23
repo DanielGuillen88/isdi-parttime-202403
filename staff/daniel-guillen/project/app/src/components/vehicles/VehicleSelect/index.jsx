@@ -4,9 +4,7 @@ import './index.css'
 // Logic
 import getAllVehicles from '../../../logic/vehicles/getAllVehicles'
 // Images
-import VehicleSmall from '../../img/VehicleSmall.jpg'
-import VehicleMedium from '../../img/VehicleMedium.jpg'
-import VehicleBig from '../../img/VehicleBig.jpg'
+import { vehicleSmall, vehicleMedium, vehicleBig } from '../../img'
 
 const VehiclesSelect = ({ selectedVehicle, handleVehicleChange }) => {
   const [data, setData] = useState([])
@@ -35,11 +33,11 @@ const VehiclesSelect = ({ selectedVehicle, handleVehicleChange }) => {
   const getImage = (size) => {
     switch (size) {
       case 'small':
-        return VehicleSmall
+        return vehicleSmall
       case 'medium':
-        return VehicleMedium
+        return vehicleMedium
       case 'big':
-        return VehicleBig
+        return vehicleBig
       default:
         return null
     }

@@ -1,10 +1,6 @@
 import './index.css'
 // img
-import grg from '../../img/grg.png'
-import palet from '../../img/palet.png'
-import bigbag from '../../img/bigbag.png'
-import b200 from '../../img/b200.png'
-import bm200 from '../../img/bm200.png'
+import { palet, grg, bigbag, b200, bm200 } from '../../img'
 
 function WasteContainer({ optionsContainer, handleOptionsContainer }) {
 

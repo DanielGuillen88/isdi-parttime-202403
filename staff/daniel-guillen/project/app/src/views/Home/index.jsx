@@ -1,26 +1,28 @@
 import { useNavigate } from 'react-router-dom'
-// components
-import Button from '../../components/core/Button'
-// img
-// import store from '../../components/img/store.jpg'
-// import vehicles from '../../components/img/vehicles.jpg'
-// import admin from '../../components/img/admin.jpg'
+import { Button } from '../../components/core'
 
 const Home = () => {
   const navigate = useNavigate() 
 
   return (
     <div className='home'>
-      <Button className="MenuButton" onClick={() => navigate('/Store')}>ALMACÉN Y SALIDAS
-        {/* <img className='image' src={store} alt="Store" /> */}
+      
+      <Button className="MenuButton" onClick={() => navigate('/StoreWaste/storedwaste')}>📦 INVENTARIO DE ALMACÉN
       </Button>
-
-      <Button className="MenuButton" onClick={() => navigate('/vehicles/inspection')}>INSPECCIÓN DE VEHÍCULOS
-        {/* <img className='image' src={vehicles} alt="Vehicles" /> */}
+      <Button className="MenuButton" onClick={() => navigate('/StoreWaste/storedwastesummary')}>📊 RESUMEN DE INVENTARIO
       </Button>
-
-      <Button className="MenuButton" onClick={() => navigate('/Admin')}>ADMINISTRADOR
-        {/* <img className='image' src={admin} alt="Admin" /> */}
+      <Button className="MenuButton" onClick={() => navigate('/StoreWaste/searchstoredwaste')}>🔎 BUSCAR RESIDUO ALMACENADO
+      </Button>
+      
+      <Button className="MenuButton" onClick={() => navigate('/Departures/registerload')}>🚚 REGISTRAR SALIDA DE RESIDUO
+      </Button>
+      <Button className="MenuButton" onClick={() => navigate('/Departures/searchdepartures')}>🔎 BUSCAR SALIDA DE RESIDUO
+      </Button>
+      
+      <Button className="MenuButton" onClick={() => navigate('/vehicles/inspection')}>🔧 INSPECCIÓN DE VEHÍCULOS
+      </Button>
+      
+      <Button className="MenuButton" onClick={() => navigate('/Admin')}>💻 ADMINISTRADOR
       </Button>
     </div>
   )

@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
-import { useCustomContext } from '../../../useContext'
+import { useCustomContext } from '../../../context/useContext'
 import './index.css'
 // components
-import Button from '../../core/Button'
-import Text from '../../core/Text'
+import { Button, Text } from '../../core'
 
 const ReferenceLoad = ({ reference, onReferenceChange }) => {
   const [inputValue, setInputValue] = useState('')
@@ -50,7 +49,7 @@ const ReferenceLoad = ({ reference, onReferenceChange }) => {
   return (
     <div className='ReferenceDiv'>
       <div className='InputDiv'>
-      <Text className='ReferenceLabel'>Registrar carga para</Text>
+      <Text className='ReferenceLabel'>🚚📦</Text>
 
       <input
         className='InputReference'

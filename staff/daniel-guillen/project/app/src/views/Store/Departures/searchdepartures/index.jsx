@@ -1,13 +1,10 @@
 import { useState, useEffect } from 'react'
+import { useCustomContext } from '../../../../context/useContext'
 import './index.css'
 // components
-import ReferenceSelect from '../../../../components/store/ReferenceSelect'
-import GroupedWasteItem from '../../../../components/store/GroupedWasteItem'
-import WasteList from '../../../../components/store/WasteList'
-import MenuLoads from '../../../../components/store/MenuLoads'
+import { ReferenceSelect, GroupedWasteItem, WasteList, MenuLoads } from '../../../../components/store'
 // handlers
 import handleDeleteWaste from '../../../../handlers/departures/deleteLoadSearchedHandle'
-import { useCustomContext } from '../../../../useContext.js'
 // logic
 import fetchLoads from '../../../../logic/departures/getWasteLoadSearched'
 

@@ -2,17 +2,13 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import '../index.css'
 // Components
-import Button from '../../../components/core/Button'
-import VehiclesSelect from '../../../components/vehicles/VehicleSelect'
-import InspectionFooter from '../../../components/vehicles/InspectionFooter'
-import InspectionSections from '../../../components/vehicles/InspectionSections'
+import { Button } from '../../../components/core'
+import { VehicleSelect, InspectionFooter, InspectionSections} from '../../../components/vehicles/index.js'
 // Handlers
 import { handleVehicleChange, handleRadioChange, saveData } from '../../../handlers/vehicles/registerVehicleInspectionHandlers'
-import { useCustomContext } from '../../../useContext'
+import { useCustomContext } from '../../../context/useContext'
 // Data
-import small from '../inspectiondata/checkListSmall.json'
-import medium from '../inspectiondata/checkListMedium.json'
-import big from '../inspectiondata/checkListBig.json'
+import { small, medium, big } from '../inspectiondata'
 
 const VehicleInspection = () => {
   const navigate = useNavigate()
@@ -53,7 +49,7 @@ const VehicleInspection = () => {
     <div className='VehicleInspection'>
       <h1 className='RouteTitle'>INSPECCIÓN DE VEHÍCULOS</h1>
       
-      <VehiclesSelect selectedVehicle={selectedVehicle} handleVehicleChange={(vehicle) => handleVehicleChange(vehicle, setSelectedVehicle)} />
+      <VehicleSelect selectedVehicle={selectedVehicle} handleVehicleChange={(vehicle) => handleVehicleChange(vehicle, setSelectedVehicle)} />
       
       {!selectedVehicle ? (
         <h2 style={{ color: 'green' }}>Seleccione un vehículo...</h2>

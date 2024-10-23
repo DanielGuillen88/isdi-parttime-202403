@@ -1,7 +1,7 @@
 import './index.css'
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { useCustomContext } from '../../useContext.js'
+import { useCustomContext } from '../../context/useContext'
 // img
 import logo from '../img/logo.png'
 import bienvenido from '../img/bienvenido.png'

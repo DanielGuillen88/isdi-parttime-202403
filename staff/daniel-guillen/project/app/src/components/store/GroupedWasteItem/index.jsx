@@ -1,6 +1,6 @@
 import './index.css'
 // components
-import Text from '../../core/Text'
+import { Text } from '../../core'
 // utils
 import groupItemsByCode from '../../../utils/groupedByCode'
 

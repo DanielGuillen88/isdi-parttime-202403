@@ -1,17 +1,14 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { useCustomContext } from '../../../context/useContext.js'
 import '../index.css'
 // components
-import Button from '../../../components/core/Button'
+import { Button}  from '../../../components/core'
 // Images
-import VehicleSmall from '../../../components/img/VehicleSmall.jpg'
-import VehicleMedium from '../../../components/img/VehicleMedium.jpg'
-import VehicleBig from '../../../components/img/VehicleBig.jpg'
-// Logic
+import { vehicleSmall, vehicleMedium, vehicleBig}  from '../../../components/img/index.js'
+// Logic Utils Handle
 import fetchInspectionsById from '../../../logic/vehicles/getInspectionsById'
 import getMonthName from '../../../utils/getMonthName.js'
-// Handlers
-import { useCustomContext } from '../../../useContext.js'
 import handleDeleteInspection from '../../../handlers/vehicles/deleteInspectionHandle.js'
 
 const VehicleHistory = () => {
@@ -28,11 +25,11 @@ const VehicleHistory = () => {
   const getImage = (size) => {   // seleccionar imagen segun el tamaño del vehículo
     switch (size) {
       case 'small':
-        return VehicleSmall
+        return vehicleSmall
       case 'medium':
-        return VehicleMedium
+        return vehicleMedium
       case 'big':
-        return VehicleBig
+        return vehicleBig
       default:
         return null
     }

@@ -1,10 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 // Components
-import Field from '../../../components/core/Field'
-import Button from '../../../components/core/Button'
-import Title from '../../../components/core/Title'
-import FormWithFeedback from '../../../components/core/FormWithFeedback'
+import { Field, Button, Title, FormWithFeedback } from '../../../components/core'
 import AccessControl from '../../../components/users/AccessControl'
 // Handlers
 import { handleRegisterSubmit, handleAccessChange } from '../../../handlers/users/registerNewUserHandllers.js'

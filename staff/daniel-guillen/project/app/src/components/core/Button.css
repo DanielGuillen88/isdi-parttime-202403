@@ -5,10 +5,10 @@
     @apply cursor-pointer text-3xl text-center items-center;
   }
   .MenuButton {
-    @apply bg-orange-500 text-xl my-2 mx-10 rounded-md;
+    @apply bg-green-700 text-white text-xl p-1 my-2 mx-10 rounded-md;
   }
   .MenuButton:hover {
-    @apply bg-orange-300;
+    @apply bg-green-300 text-black;
   }
   .SubmitButton {
     @apply bg-green-700 my-2 mx-10 rounded-md;

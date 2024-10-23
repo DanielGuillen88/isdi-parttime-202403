@@ -1,8 +1,6 @@
 import { useState } from 'react'
 // components
-import FormWithFeedback from "../../components/core/FormWithFeedback"
-import Field from "../../components/core/Field"
-import Button from "../../components/core/Button"
+import { FormWithFeedback, Field, Button } from "../../components/core"
 // logic
 import loginUser from "../../logic/users/loginUser"
 // validation
@@ -31,7 +29,6 @@ const Login = ({ setIsAuthenticated }) => {
         setIsAuthenticated(true) // actualiza el estado de autenticación 
       }, 2000)
     } catch (error) {
-      // console.error(error)
       setMessage(error.message) // mostrar mensaje de error en el FormWithFeedback
     }
   }
@@ -39,8 +36,8 @@ const Login = ({ setIsAuthenticated }) => {
   return (
     <div className="container">
       <FormWithFeedback onSubmit={handleLoginSubmit} message={message} level={level}>
-        <Field id="username" placeholder="username">Nombre de Usuario</Field>
-        <Field id="password" type="password" placeholder="password">Contraseña</Field>
+        <Field id="username" placeholder="👷 username">Nombre de Usuario</Field>
+        <Field id="password" type="password" placeholder="🗝️ password">Contraseña</Field>
         <Button className="SubmitButton">Login</Button>
       </FormWithFeedback>
     </div>

@@ -1,9 +1,10 @@
-// com
+// validations erros
 import validate from "com/validate/validateVehicles"
 import { SystemError, ValidationError } from "com/errors"
-// logic
+// logic utils
 import createInspection from "../../logic/vehicles/createInspection"
 import fetchUserName from "../../logic/users/getUserName"
+import getTodayMonthYear from "../../utils/getTodayMonthYear"
 
 // handle vehicle selection
 export const handleVehicleChange = (selectedVehicle, setSelectedVehicle) => {
@@ -33,10 +34,7 @@ export const filterItemsToFix = (checkList, alert) => { // filtrar marcados como
 // enviar registro de inspeccion
 export const saveData = async (selectedVehicle, checkList, inspectionNote, token, navigate, alert) => {
   const workerName = await fetchUserName(token)// obtener username
-  const today = new Date() // Obtener fecha actual
-  const date = today.toISOString()
-  const month = String(today.getMonth() + 1).padStart(2, '0')
-  const year = String(today.getFullYear())
+  const { date, month, year } = getTodayMonthYear()
   const itemFix = filterItemsToFix(checkList, alert) // Filtrar los elementos que se necesitan arreglar
   if (!itemFix) return
     

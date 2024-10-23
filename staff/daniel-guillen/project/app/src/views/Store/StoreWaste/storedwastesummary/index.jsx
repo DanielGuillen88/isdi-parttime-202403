@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import './index.css'
 //components
-import GroupedWasteItem from '../../../../components/store/GroupedWasteItem'
-import MenuStore from '../../../../components/store/MenuStore'
-// logic
+import { GroupedWasteItem, MenuStore } from '../../../../components/store'
+// logic utils
 import fetchStoredWaste from '../../../../logic/stored/getWasteStored.js'
+import getTodayMonthYear from '../../../../utils/getTodayMonthYear.js'
 
 const StoredWasteSummary = () => {
   const token = sessionStorage.getItem('token') // obtener el token de sessionStorage
@@ -13,9 +13,7 @@ const StoredWasteSummary = () => {
   const [loading, setLoading] = useState(true) // mostrar el estado de carga
   const [error, setError] = useState(null) // manejar errores
 
-  const today = new Date() // Obtener mes y año actuales
-  const month = String(today.getMonth() + 1).padStart(2, '0')
-  const year = String(today.getFullYear())
+  const { month, year } = getTodayMonthYear()
   
   useEffect(() => {// obtener la lista de residuos del servidor
     fetchStoredWaste(month, year, token, setData, setLoading, setError)

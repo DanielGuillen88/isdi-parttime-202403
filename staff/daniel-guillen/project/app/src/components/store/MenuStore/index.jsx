@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 // components
-import Button from '../../core/Button'
+import { Button } from '../../core'
 
 const MenuStore = () => {
   const navigate = useNavigate()

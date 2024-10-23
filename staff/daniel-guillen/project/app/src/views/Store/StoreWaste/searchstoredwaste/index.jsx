@@ -1,15 +1,13 @@
 import { useState, useEffect } from 'react'
+import { useCustomContext } from '../../../../context/useContext.js'
 import './index.css'
 // Components
-import CodeSelect from '../../../../components/store/CodeSelect'
-import GroupedWasteItem from '../../../../components/store/GroupedWasteItem'
-import WasteList from '../../../../components/store/WasteList'
-import MenuStore from '../../../../components/store/MenuStore'
-// Logic
+import { CodeSelect, GroupedWasteItem, WasteList, MenuStore } from '../../../../components/store'
+// Logic utils
 import fetchStoredWaste from '../../../../logic/stored/getWasteStoredByCode'
+import getTodayMonthYear from '../../../../utils/getTodayMonthYear.js'
 // Handlers
 import handleDeleteWaste from '../../../../handlers/stored/deleteWasteStoredSearchHandle.js'
-import { useCustomContext } from '../../../../useContext.js'
 
 const SearchStoredWaste = () => {
   const token = sessionStorage.getItem('token') // obtener el token de sessionStorage
@@ -23,9 +21,7 @@ const SearchStoredWaste = () => {
     setSelectedWaste(selectedWaste)
   }
 
-  const today = new Date()   // obtener fecha fecha, mes y año actual
-  const month = String(today.getMonth() + 1).padStart(2, '0')
-  const year = String(today.getFullYear())
+  const { month, year } = getTodayMonthYear()
 
   useEffect(() => {   // obtener la lista de residuos del servidor
     if (selectedWaste) {

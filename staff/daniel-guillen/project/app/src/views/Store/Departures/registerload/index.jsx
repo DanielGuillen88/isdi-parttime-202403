@@ -1,22 +1,15 @@
 import { useState, useEffect } from 'react'
+import { useCustomContext } from '../../../../context/useContext.js'
 import './index.css'
 // components
-import ReferenceLoad from '../../../../components/store/ReferenceLoad'
-import WasteSelect from '../../../../components/store/WasteSelect'
-import WasteContainer from '../../../../components/store/WasteContainer'
-import WasteWeight from '../../../../components/store/WasteWeight'
-import Button from '../../../../components/core/Button'
-import GroupedWasteItem from '../../../../components/store/GroupedWasteItem'
-import WasteList from '../../../../components/store/WasteList/index.jsx'
-import MenuLoads from '../../../../components/store/MenuLoads'
-// logic
+import { ReferenceLoad, WasteSelect, WasteContainer, WasteWeight, GroupedWasteItem, WasteList, MenuLoads } from '../../../../components/store'
+import { Button } from '../../../../components/core'
+// logic utils
 import fetchLoadWaste from '../../../../logic/departures/getWasteLoad.js'
-// utils
 import getWeekNumberYear from '../../../../utils/getWeekNumberYear'
 // handlers
 import { handleReferenceChange, handleWasteChange, handleWeightChange, handleOptionsContainer, handleSubmit } from '../../../../handlers/departures/registerWasteLoadHandlers.js'
 import handleDeleteWaste from '../../../../handlers/departures/deleteWasteLoadHandle.js'
-import { useCustomContext } from '../../../../useContext.js'
 
 const RegisterLoad = () => {
   const token = sessionStorage.getItem('token') // obtener el token de sessionStorage

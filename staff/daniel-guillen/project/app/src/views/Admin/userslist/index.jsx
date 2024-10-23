@@ -1,14 +1,14 @@
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import { useCustomContext } from '../../../context/useContext'
 import './index.css'
 // Components
-import Button from "../../../components/core/Button"
-import Title from '../../../components/core/Title'
+import { Button, Title } from "../../../components/core"
 // Api, utils y handlers
 import fetchAllUsers from '../../../logic/users/getAllUsers'
 import sortUsers from '../../../utils/sortUsers'
 import handleDeleteUser from '../../../handlers/users/deleteUserHandle'
-import { useCustomContext } from '../../../useContext.js'
+
 
 const UsersList = () => {
   const [data, setData] = useState([])  // almacenar la lista de usuarios

@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { Context } from './useContext.js'
-import Alert from './components/core/Alert'
-import Confirm from './components/core/Confirm'
+import { Context } from './useContext'
+// components
+import Alert from '../components/core/Alert'
+import Confirm from '../components/core/Confirm'
 
 const ContextProvider = ({ children }) => {
   const [message, setMessage] = useState(null) // Estado para alertas

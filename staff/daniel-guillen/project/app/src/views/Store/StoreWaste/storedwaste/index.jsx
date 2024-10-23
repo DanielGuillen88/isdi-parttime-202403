@@ -1,19 +1,16 @@
 import { useState, useEffect } from 'react'
+import { useCustomContext } from '../../../../context/useContext.js'
 import './index.css'
 // Components
-import Button from '../../../../components/core/Button'
-import WasteSelect from '../../../../components/store/WasteSelect'
-import WasteContainer from '../../../../components/store/WasteContainer'
-import WasteStatus from '../../../../components/store/WasteStatus'
-import WasteWeight from '../../../../components/store/WasteWeight'
-import WasteList from '../../../../components/store/WasteList/index.jsx'
-import MenuStore from '../../../../components/store/MenuStore'
-// Logic
+import { Button } from '../../../../components/core'
+import { WasteSelect, WasteContainer, WasteStatus, WasteWeight, WasteList, MenuStore } from '../../../../components/store'
+// Logic utils
 import fetchStoredWaste from '../../../../logic/stored/getWasteStored.js'
+import getTodayMonthYear from '../../../../utils/getTodayMonthYear.js'
 // Handlers
 import { handleWasteChange, handleWeightChange, handleOptionsContainer, handleStatusOptions, handleSubmit } from '../../../../handlers/stored/registerWasteStoredHandlers.js'
 import handleDeleteWaste from '../../../../handlers/stored/deleteWasteStoredHandle.js'
-import { useCustomContext } from '../../../../useContext.js'
+
 
 const StoredWaste = () => {
   const token = sessionStorage.getItem('token') // obtener el token de sessionStorage
@@ -27,9 +24,7 @@ const StoredWaste = () => {
   const [optionsContainer, setOptionsContainer] = useState('')
   const [statusOptions, setStatusOptions] = useState('CORRECTO')
 
-  const today = new Date() // Obtener mes y año actuales
-  const month = String(today.getMonth() + 1).padStart(2, '0')
-  const year = String(today.getFullYear())
+  const { month, year } = getTodayMonthYear()
 
   useEffect(() => {   // obtener la lista de residuos del servidor
     fetchStoredWaste(month, year, token, setData, setLoading, setError)
