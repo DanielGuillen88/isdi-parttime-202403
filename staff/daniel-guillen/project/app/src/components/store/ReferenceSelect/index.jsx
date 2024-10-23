@@ -19,7 +19,7 @@ const ReferenceSelect = ({ selectedReference, handleReferenceChange }) => {
   }, [])
 
   // Ordenar opciones
-  const options = data.sort((a, b) => a.value.localeCompare(b.value))
+  const options = data.sort((b, a) => a.value.localeCompare(b.value))
 
   // opción seleccionada a partir del valor de selectedReference
   const selectedOption = options.find(option => option.value === selectedReference)
